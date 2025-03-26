@@ -5,7 +5,7 @@ import {
 } from 'recharts';
 import { 
   PlusCircle, Trash2, Edit2, Package, Activity, CreditCard, Calendar, 
-  Users, BarChart2, Briefcase, Tag, Clock, TrendingUp, Check
+  Users, BarChart2, Briefcase, Tag, Clock, TrendingUp, Check, DollarSign
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -854,4 +854,3 @@ const STOCalculator = () => {
         
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">{t.price}</label>
-          <div className
