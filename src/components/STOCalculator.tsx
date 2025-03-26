@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -72,11 +71,110 @@ interface CashFlowResult {
   cumulativeCashFlow?: number;
 }
 
-// Language translations
+// More specific type for nested translations
+interface ProductCategories {
+  dtc: string;
+  dtb: string;
+  reseller: string;
+  software: string;
+}
+
+interface RevenueTypes {
+  product: string;
+  license: string;
+  subscription: string;
+  service: string;
+}
+
+interface TranslationObject {
+  title: string;
+  subtitle: string;
+  dashboard: string;
+  products: string;
+  incomeStreams: string;
+  fixedCosts: string;
+  financialOverview: string;
+  allCategories: string;
+  totalRevenue: string;
+  acrossPeriods: string;
+  averageGrossMargin: string;
+  averageOverTime: string;
+  endingLiquidity: string;
+  endOfLastPeriod: string;
+  latestOperatingResult: string;
+  resultDevelopment: string;
+  liquidityDevelopment: string;
+  revenueByCategory: string;
+  keyMetricsByCategory: string;
+  averageCAC: string;
+  averageCLV: string;
+  averageAOV: string;
+  averageCPO: string;
+  addNew: string;
+  name: string;
+  type: string;
+  category: string;
+  revenueType: string;
+  price: string;
+  marginPercentage: string;
+  actions: string;
+  productMetricsAndProfitability: string;
+  clv: string;
+  cac: string;
+  roi: string;
+  margin: string;
+  detailedMetrics: string;
+  costPerOrder: string;
+  avgOrderValue: string;
+  customerLifetime: string;
+  ordersPerYear: string;
+  subscribers: string;
+  arpu: string;
+  churn: string;
+  latestSubscribers: string;
+  latestARPU: string;
+  latestChurn: string;
+  totalRevenueMetric: string;
+  averageGrowth: string;
+  cost: string;
+  total: string;
+  addNewProduct: string;
+  productName: string;
+  productType: string;
+  serviceType: string;
+  productionCost: string;
+  logisticsCost: string;
+  operationalCost: string;
+  marketingCost: string;
+  customerMetrics: string;
+  avgOrdersPerYear: string;
+  avgOrderValueLabel: string;
+  leaveBlank: string;
+  customerRelationshipLength: string;
+  customerAcquisitionCost: string;
+  cancel: string;
+  add: string;
+  editProduct: string;
+  update: string;
+  revenue: string;
+  netCashFlow: string;
+  cumulativeCashFlow: string;
+  cogs: string;
+  fixedCostsLabel: string;
+  operatingResult: string;
+  settings: string;
+  language: string;
+  currency: string;
+  theme: string;
+  light: string;
+  dark: string;
+  productCategories: ProductCategories;
+  revenueTypes: RevenueTypes;
+}
+
+// Language translations with proper typing
 const translations: {
-  [key: string]: {
-    [key: string]: string | {[key: string]: string}
-  }
+  [key: string]: TranslationObject
 } = {
   en: {
     title: 'STO Calculator',
@@ -270,203 +368,7 @@ const translations: {
   }
 };
 
-// Updated Product categories with reseller
-const PRODUCT_CATEGORIES = [
-  { id: 'dtc', name: 'Direct-to-Consumer (DTC)' },
-  { id: 'dtb', name: 'Direct-to-Business (DTB)' },
-  { id: 'reseller', name: 'Reseller' },
-  { id: 'software', name: 'Software/Service' },
-];
-
-// Revenue types
-const REVENUE_TYPES = [
-  { id: 'product', name: 'Product-based' },
-  { id: 'license', name: 'License-based' },
-  { id: 'subscription', name: 'Subscription-based' },
-  { id: 'service', name: 'Service-based' },
-];
-
-// Initial products
-const initialProducts: Product[] = [
-  { 
-    id: 1, 
-    name: 'Heat Patch Menstrual Pain 3pk', 
-    price: 100, 
-    productionCost: 12,
-    logisticsCost: 5,
-    marketingCost: 20,
-    cost: 17, 
-    margin: 83, 
-    marginPercentage: 0.83,
-    type: 'product',
-    category: 'dtc',
-    revenueType: 'product',
-    averageReorderRate: 3.5,
-    averageOrderValue: 100,
-    customerLifetimeMonths: 12,
-    acquisitionCost: 200,
-  },
-  { 
-    id: 2, 
-    name: 'Period Pain Relief International 3pk', 
-    price: 100, 
-    productionCost: 0,
-    logisticsCost: 0,
-    marketingCost: 25,
-    cost: 0, 
-    margin: 100, 
-    marginPercentage: 1.0,
-    type: 'product',
-    category: 'dtc',
-    revenueType: 'product',
-    averageReorderRate: 4,
-    averageOrderValue: 100,
-    customerLifetimeMonths: 18,
-    acquisitionCost: 180,
-  },
-  {
-    id: 3,
-    name: 'Subscription API Service',
-    price: 5000,
-    operationalCost: 1000,
-    marketingCost: 500,
-    cost: 1000,
-    margin: 4000,
-    marginPercentage: 0.8,
-    type: 'service',
-    category: 'dtb',
-    revenueType: 'license',
-    averageReorderRate: 1,
-    averageOrderValue: 5000,
-    customerLifetimeMonths: 24,
-    acquisitionCost: 2000,
-  },
-  {
-    id: 4,
-    name: 'Health Product Bundle via Resellers',
-    price: 500,
-    productionCost: 150,
-    logisticsCost: 50,
-    marketingCost: 75,
-    cost: 200,
-    margin: 300,
-    marginPercentage: 0.6,
-    type: 'product',
-    category: 'reseller',
-    revenueType: 'product',
-    averageReorderRate: 6,
-    averageOrderValue: 500,
-    customerLifetimeMonths: 36,
-    acquisitionCost: 1000,
-  }
-];
-
-// Initial periods
-const initialPeriods = [
-  { id: 1, date: new Date('2024-12-31'), label: '2024' },
-  { id: 2, date: new Date('2025-12-31'), label: '2025' },
-  { id: 3, date: new Date('2026-12-31'), label: '2026' },
-  { id: 4, date: new Date('2027-12-31'), label: '2027' },
-  { id: 5, date: new Date('2028-12-31'), label: '2028' }
-];
-
-// Initial income streams
-const initialIncomeStreams = [
-  {
-    id: 1,
-    name: 'DTC Online',
-    type: 'subscription',
-    category: 'dtc',
-    revenueType: 'product',
-    values: [
-      { periodId: 1, averageRevenue: 1400, subscribers: 500, multiplier: 1, churnRate: 0.08 },
-      { periodId: 2, averageRevenue: 1620, subscribers: 1200, multiplier: 1.2, churnRate: 0.076 },
-      { periodId: 3, averageRevenue: 1750, subscribers: 2500, multiplier: 1.3, churnRate: 0.07 },
-      { periodId: 4, averageRevenue: 1800, subscribers: 5000, multiplier: 1.5, churnRate: 0.065 },
-      { periodId: 5, averageRevenue: 1850, subscribers: 8500, multiplier: 1.6, churnRate: 0.06 }
-    ]
-  },
-  {
-    id: 2,
-    name: 'B2B Solutions',
-    type: 'sales',
-    category: 'dtb',
-    revenueType: 'license',
-    values: [
-      { periodId: 1, revenue: 630000 },
-      { periodId: 2, revenue: 1260000 },
-      { periodId: 3, revenue: 2520000 },
-      { periodId: 4, revenue: 5040000 },
-      { periodId: 5, revenue: 7560000 }
-    ]
-  },
-  {
-    id: 3,
-    name: 'Reseller Channel',
-    type: 'sales',
-    category: 'reseller',
-    revenueType: 'product',
-    values: [
-      { periodId: 1, revenue: 420000 },
-      { periodId: 2, revenue: 840000 },
-      { periodId: 3, revenue: 1680000 },
-      { periodId: 4, revenue: 3360000 },
-      { periodId: 5, revenue: 5040000 }
-    ]
-  }
-];
-
-// Initial fixed costs
-const initialFixedCosts = [
-  { 
-    id: 1, 
-    name: 'Salaries', 
-    values: [
-      { periodId: 1, amount: 2000000 },
-      { periodId: 2, amount: 3500000 },
-      { periodId: 3, amount: 5000000 },
-      { periodId: 4, amount: 7000000 },
-      { periodId: 5, amount: 8500000 }
-    ]
-  },
-  { 
-    id: 2, 
-    name: 'Marketing', 
-    values: [
-      { periodId: 1, amount: 1500000 },
-      { periodId: 2, amount: 2500000 },
-      { periodId: 3, amount: 3500000 },
-      { periodId: 4, amount: 4500000 },
-      { periodId: 5, amount: 5000000 }
-    ]
-  }
-];
-
-// Enhanced Color palette with reseller category
-const COLORS = {
-  primary: '#4f46e5',
-  secondary: '#8b5cf6',
-  success: '#10b981',
-  danger: '#ef4444',
-  warning: '#f97316',
-  info: '#0ea5e9',
-  dtc: '#10b981',
-  dtb: '#0ea5e9',
-  reseller: '#8b5cf6',
-  software: '#f97316'
-};
-
-// Currency conversion rates
-const CURRENCY_RATES = {
-  USD: 1,
-  NOK: 10.5
-};
-
-// Currency symbols
-const CURRENCY_SYMBOLS = {
-  USD: '$',
-  NOK: 'kr'
-};
+// ... keep existing code (PRODUCT_CATEGORIES, REVENUE_TYPES, initialProducts, initialPeriods, initialIncomeStreams, initialFixedCosts, COLORS, CURRENCY_RATES, CURRENCY_SYMBOLS constants)
 
 // Main component
 const STOCalculator = () => {
@@ -512,11 +414,21 @@ const STOCalculator = () => {
   // Get translations based on selected language
   const t = translations[language];
 
+  // Get translated category name safely
+  const getCategoryName = (categoryId: string): string => {
+    return t.productCategories[categoryId as keyof ProductCategories] || categoryId;
+  };
+  
+  // Get translated revenue type name safely
+  const getRevenueTypeName = (typeId: string): string => {
+    return t.revenueTypes[typeId as keyof RevenueTypes] || typeId;
+  };
+
   // Get category names with translations
   const getProductCategories = useMemo(() => {
     return PRODUCT_CATEGORIES.map(cat => ({
       ...cat,
-      name: t.productCategories[cat.id] || cat.name
+      name: getCategoryName(cat.id)
     }));
   }, [language]);
 
@@ -524,7 +436,7 @@ const STOCalculator = () => {
   const getRevenueTypes = useMemo(() => {
     return REVENUE_TYPES.map(type => ({
       ...type,
-      name: t.revenueTypes[type.id] || type.name
+      name: getRevenueTypeName(type.id)
     }));
   }, [language]);
   
@@ -871,6 +783,20 @@ const STOCalculator = () => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="bg-white rounded-lg p-6 w-full max-w-md">
           {renderProductModal()}
+          <div className="flex justify-end mt-6 space-x-2">
+            <button 
+              onClick={() => setShowModal(false)} 
+              className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+            >
+              {t.cancel}
+            </button>
+            <button 
+              onClick={modalType === 'editProduct' ? updateProduct : addProduct}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              {modalType === 'editProduct' ? t.update : t.add}
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -881,6 +807,8 @@ const STOCalculator = () => {
       <div className="container mx-auto py-8 px-4">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">{t.title}</h1>
         <p className="text-gray-600 mb-8">{t.subtitle}</p>
+        
+        {renderModal()}
       </div>
     </div>
   );
