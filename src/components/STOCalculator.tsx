@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -368,7 +369,224 @@ const translations: {
   }
 };
 
-// ... keep existing code (PRODUCT_CATEGORIES, REVENUE_TYPES, initialProducts, initialPeriods, initialIncomeStreams, initialFixedCosts, COLORS, CURRENCY_RATES, CURRENCY_SYMBOLS constants)
+// Constants and initial data that were missing
+const PRODUCT_CATEGORIES = [
+  { id: 'dtc', name: 'Direct-to-Consumer (DTC)' },
+  { id: 'dtb', name: 'Direct-to-Business (DTB)' },
+  { id: 'reseller', name: 'Reseller' },
+  { id: 'software', name: 'Software/Service' }
+];
+
+const REVENUE_TYPES = [
+  { id: 'product', name: 'Product-based' },
+  { id: 'license', name: 'License-based' },
+  { id: 'subscription', name: 'Subscription-based' },
+  { id: 'service', name: 'Service-based' }
+];
+
+const COLORS = {
+  revenue: '#4263EB',
+  cogs: '#FA5252',
+  fixedCosts: '#FF922B',
+  operatingResult: '#40C057',
+  cashFlow: '#4263EB',
+  cumulativeCashFlow: '#40C057',
+  dtc: '#4263EB',
+  dtb: '#FA5252',
+  reseller: '#FF922B',
+  software: '#40C057'
+};
+
+const CURRENCY_RATES = {
+  USD: 1,
+  EUR: 0.91,
+  GBP: 0.77,
+  NOK: 10.5,
+  DKK: 6.8,
+  SEK: 10.3
+};
+
+const CURRENCY_SYMBOLS = {
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+  NOK: 'kr',
+  DKK: 'kr',
+  SEK: 'kr'
+};
+
+// Initial periods (e.g., quarters or months)
+const initialPeriods = [
+  { id: 1, label: 'Q1 2023', date: new Date(2023, 2, 31) },
+  { id: 2, label: 'Q2 2023', date: new Date(2023, 5, 30) },
+  { id: 3, label: 'Q3 2023', date: new Date(2023, 8, 30) },
+  { id: 4, label: 'Q4 2023', date: new Date(2023, 11, 31) },
+  { id: 5, label: 'Q1 2024', date: new Date(2024, 2, 31) },
+  { id: 6, label: 'Q2 2024', date: new Date(2024, 5, 30) }
+];
+
+// Initial sample products
+const initialProducts: Product[] = [
+  {
+    id: 1,
+    name: 'Premium Widget',
+    price: 99,
+    productionCost: 25,
+    logisticsCost: 15,
+    marketingCost: 10,
+    cost: 50,
+    margin: 49,
+    marginPercentage: 0.49,
+    type: 'product',
+    category: 'dtc',
+    revenueType: 'product',
+    averageReorderRate: 2.1,
+    averageOrderValue: 99,
+    customerLifetimeMonths: 24,
+    acquisitionCost: 30
+  },
+  {
+    id: 2,
+    name: 'Business Solution',
+    price: 199,
+    operationalCost: 40,
+    marketingCost: 20,
+    cost: 60,
+    margin: 139,
+    marginPercentage: 0.7,
+    type: 'service',
+    category: 'dtb',
+    revenueType: 'subscription',
+    averageReorderRate: 12,
+    averageOrderValue: 199,
+    customerLifetimeMonths: 36,
+    acquisitionCost: 100
+  },
+  {
+    id: 3,
+    name: 'Budget Widget',
+    price: 49,
+    productionCost: 15,
+    logisticsCost: 10,
+    marketingCost: 5,
+    cost: 30,
+    margin: 19,
+    marginPercentage: 0.39,
+    type: 'product',
+    category: 'reseller',
+    revenueType: 'product',
+    averageReorderRate: 1.5,
+    averageOrderValue: 49,
+    customerLifetimeMonths: 18,
+    acquisitionCost: 15
+  },
+  {
+    id: 4,
+    name: 'SaaS Platform',
+    price: 99,
+    operationalCost: 20,
+    marketingCost: 10,
+    cost: 30,
+    margin: 69,
+    marginPercentage: 0.7,
+    type: 'service',
+    category: 'software',
+    revenueType: 'subscription',
+    averageReorderRate: 12,
+    averageOrderValue: 99,
+    customerLifetimeMonths: 24,
+    acquisitionCost: 50
+  }
+];
+
+// Initial income streams
+const initialIncomeStreams = [
+  {
+    id: 1,
+    name: 'DTC Sales',
+    type: 'sales',
+    category: 'dtc',
+    values: [
+      { periodId: 1, revenue: 50000 },
+      { periodId: 2, revenue: 65000 },
+      { periodId: 3, revenue: 80000 },
+      { periodId: 4, revenue: 110000 },
+      { periodId: 5, revenue: 95000 },
+      { periodId: 6, revenue: 125000 }
+    ]
+  },
+  {
+    id: 2,
+    name: 'B2B Sales',
+    type: 'sales',
+    category: 'dtb',
+    values: [
+      { periodId: 1, revenue: 120000 },
+      { periodId: 2, revenue: 130000 },
+      { periodId: 3, revenue: 150000 },
+      { periodId: 4, revenue: 180000 },
+      { periodId: 5, revenue: 200000 },
+      { periodId: 6, revenue: 220000 }
+    ]
+  },
+  {
+    id: 3,
+    name: 'SaaS Subscription',
+    type: 'subscription',
+    category: 'software',
+    values: [
+      { periodId: 1, subscribers: 500, averageRevenue: 99, multiplier: 1, churnRate: 0.03 },
+      { periodId: 2, subscribers: 650, averageRevenue: 99, multiplier: 1, churnRate: 0.03 },
+      { periodId: 3, subscribers: 800, averageRevenue: 99, multiplier: 1, churnRate: 0.025 },
+      { periodId: 4, subscribers: 950, averageRevenue: 99, multiplier: 1, churnRate: 0.025 },
+      { periodId: 5, subscribers: 1100, averageRevenue: 99, multiplier: 1, churnRate: 0.02 },
+      { periodId: 6, subscribers: 1300, averageRevenue: 99, multiplier: 1, churnRate: 0.02 }
+    ]
+  }
+];
+
+// Initial fixed costs
+const initialFixedCosts = [
+  {
+    id: 1,
+    name: 'Salaries',
+    category: 'personnel',
+    values: [
+      { periodId: 1, amount: 50000 },
+      { periodId: 2, amount: 50000 },
+      { periodId: 3, amount: 60000 },
+      { periodId: 4, amount: 60000 },
+      { periodId: 5, amount: 70000 },
+      { periodId: 6, amount: 70000 }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Office & Facilities',
+    category: 'facilities',
+    values: [
+      { periodId: 1, amount: 15000 },
+      { periodId: 2, amount: 15000 },
+      { periodId: 3, amount: 15000 },
+      { periodId: 4, amount: 15000 },
+      { periodId: 5, amount: 18000 },
+      { periodId: 6, amount: 18000 }
+    ]
+  },
+  {
+    id: 3,
+    name: 'Marketing',
+    category: 'marketing',
+    values: [
+      { periodId: 1, amount: 20000 },
+      { periodId: 2, amount: 25000 },
+      { periodId: 3, amount: 30000 },
+      { periodId: 4, amount: 40000 },
+      { periodId: 5, amount: 30000 },
+      { periodId: 6, amount: 35000 }
+    ]
+  }
+];
 
 // Main component
 const STOCalculator = () => {
@@ -754,14 +972,22 @@ const STOCalculator = () => {
     
     const renderProductModal = () => (
       <>
-        <h3 className="text-lg font-medium mb-4">{t.addNewProduct}</h3>
+        <h3 className="text-lg font-medium mb-4">
+          {modalType === 'editProduct' ? t.editProduct : t.addNewProduct}
+        </h3>
         
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">{t.name}</label>
           <input
             type="text"
-            value={newProduct.name}
-            onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
+            value={modalType === 'editProduct' ? editingProduct?.name : newProduct.name}
+            onChange={(e) => {
+              if (modalType === 'editProduct' && editingProduct) {
+                setEditingProduct({...editingProduct, name: e.target.value});
+              } else {
+                setNewProduct({...newProduct, name: e.target.value});
+              }
+            }}
             className="w-full px-3 py-2 border rounded-md"
             placeholder={t.productName}
           />
@@ -771,8 +997,15 @@ const STOCalculator = () => {
           <label className="block text-sm font-medium mb-1">{t.price}</label>
           <input
             type="number"
-            value={newProduct.price}
-            onChange={(e) => setNewProduct({...newProduct, price: parseFloat(e.target.value) || 0})}
+            value={modalType === 'editProduct' ? editingProduct?.price : newProduct.price}
+            onChange={(e) => {
+              const value = parseFloat(e.target.value) || 0;
+              if (modalType === 'editProduct' && editingProduct) {
+                setEditingProduct({...editingProduct, price: value});
+              } else {
+                setNewProduct({...newProduct, price: value});
+              }
+            }}
             className="w-full px-3 py-2 border rounded-md"
           />
         </div>
