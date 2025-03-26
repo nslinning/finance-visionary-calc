@@ -72,7 +72,9 @@ interface CashFlowResult {
 }
 
 // Language translations
-const translations = {
+const translations: {
+  [key: string]: any
+} = {
   en: {
     title: 'STO Calculator',
     subtitle: 'Strategic financial planning for STO and growth companies',
@@ -852,5 +854,4 @@ const STOCalculator = () => {
         
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">{t.price}</label>
-          <div className="relative">
-            <span className="absolute inset-
+          <div className
