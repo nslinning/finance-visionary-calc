@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -73,7 +74,9 @@ interface CashFlowResult {
 
 // Language translations
 const translations: {
-  [key: string]: any
+  [key: string]: {
+    [key: string]: string | {[key: string]: string}
+  }
 } = {
   en: {
     title: 'STO Calculator',
@@ -854,3 +857,33 @@ const STOCalculator = () => {
         
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">{t.price}</label>
+          <input
+            type="number"
+            value={newProduct.price}
+            onChange={(e) => setNewProduct({...newProduct, price: parseFloat(e.target.value) || 0})}
+            className="w-full px-3 py-2 border rounded-md"
+          />
+        </div>
+      </>
+    );
+    
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="bg-white rounded-lg p-6 w-full max-w-md">
+          {renderProductModal()}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="bg-gray-50 min-h-screen">
+      <div className="container mx-auto py-8 px-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">{t.title}</h1>
+        <p className="text-gray-600 mb-8">{t.subtitle}</p>
+      </div>
+    </div>
+  );
+};
+
+export default STOCalculator;
