@@ -13,10 +13,6 @@ const PlaceholderTab: React.FC<PlaceholderTabProps> = ({ title }) => (
   </div>
 );
 
-export const IncomeStreamsTab: React.FC<{ t: TranslationObject }> = ({ t }) => (
-  <PlaceholderTab title={t.incomeStreams} />
-);
-
 export const FixedCostsTab: React.FC<{ t: TranslationObject }> = ({ t }) => (
   <PlaceholderTab title={t.fixedCosts} />
 );

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { TranslationObject } from '../../constants/calculator';
+import { DollarSign, Euro, Currency } from 'lucide-react';
 
 interface SettingsModalProps {
   t: TranslationObject;
@@ -48,32 +49,74 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {t.currency}
               </label>
-              <select
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm p-2 bg-white dark:bg-gray-900"
-              >
-                <option value="USD">USD ($)</option>
-                <option value="EUR">EUR (€)</option>
-                <option value="GBP">GBP (£)</option>
-                <option value="NOK">NOK (kr)</option>
-                <option value="DKK">DKK (kr)</option>
-                <option value="SEK">SEK (kr)</option>
-              </select>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setCurrency('USD')}
+                  className={`flex items-center justify-center p-2 rounded-md border ${
+                    currency === 'USD' 
+                      ? 'bg-blue-100 border-blue-500 dark:bg-blue-900 dark:border-blue-400' 
+                      : 'border-gray-300 dark:border-gray-700'
+                  }`}
+                >
+                  <DollarSign className="h-4 w-4 mr-1" />
+                  <span>USD</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrency('EUR')}
+                  className={`flex items-center justify-center p-2 rounded-md border ${
+                    currency === 'EUR' 
+                      ? 'bg-blue-100 border-blue-500 dark:bg-blue-900 dark:border-blue-400' 
+                      : 'border-gray-300 dark:border-gray-700'
+                  }`}
+                >
+                  <Euro className="h-4 w-4 mr-1" />
+                  <span>EUR</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrency('NOK')}
+                  className={`flex items-center justify-center p-2 rounded-md border ${
+                    currency === 'NOK' 
+                      ? 'bg-blue-100 border-blue-500 dark:bg-blue-900 dark:border-blue-400' 
+                      : 'border-gray-300 dark:border-gray-700'
+                  }`}
+                >
+                  <Currency className="h-4 w-4 mr-1" />
+                  <span>NOK</span>
+                </button>
+              </div>
             </div>
             
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {t.theme}
               </label>
-              <select
-                value={theme}
-                onChange={(e) => setTheme(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm p-2 bg-white dark:bg-gray-900"
-              >
-                <option value="light">{t.light}</option>
-                <option value="dark">{t.dark}</option>
-              </select>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setTheme('light')}
+                  className={`p-2 rounded-md border ${
+                    theme === 'light' 
+                      ? 'bg-blue-100 border-blue-500 dark:bg-blue-900 dark:border-blue-400' 
+                      : 'border-gray-300 dark:border-gray-700'
+                  }`}
+                >
+                  {t.light}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTheme('dark')}
+                  className={`p-2 rounded-md border ${
+                    theme === 'dark' 
+                      ? 'bg-blue-100 border-blue-500 dark:bg-blue-900 dark:border-blue-400' 
+                      : 'border-gray-300 dark:border-gray-700'
+                  }`}
+                >
+                  {t.dark}
+                </button>
+              </div>
             </div>
           </div>
           

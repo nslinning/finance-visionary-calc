@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -40,7 +41,8 @@ import DashboardTab from './Dashboard/DashboardTab';
 import ProductsTab from './Products/ProductsTab';
 import ProductModal from './Products/ProductModal';
 import SettingsModal from './Settings/SettingsModal';
-import { IncomeStreamsTab, FixedCostsTab } from './Placeholders/PlaceholderTabs';
+import { FixedCostsTab } from './Placeholders/PlaceholderTabs';
+import IncomeStreamsTab from './IncomeStreams/IncomeStreamsTab';
 
 // Main component
 const STOCalculator = () => {
@@ -167,17 +169,18 @@ const STOCalculator = () => {
     const newId = Math.max(0, ...products.map(p => p.id)) + 1;
     
     // Create product object with all properties
-    const productToAdd = {
+    const productToAdd: Product = {
       ...newProduct,
       id: newId,
       cost,
       margin,
       marginPercentage,
-      averageOrderValue: newProduct.averageOrderValue || newProduct.price
-    };
+      averageOrderValue: newProduct.averageOrderValue || newProduct.price,
+      type: newProduct.type as 'product' | 'service'
+    } as Product;
     
     // Add product to state
-    setProducts([...products, productToAdd as Product]);
+    setProducts([...products, productToAdd]);
     
     // Reset form
     setNewProduct(defaultNewProduct);
@@ -449,7 +452,16 @@ const STOCalculator = () => {
             />
           )}
           
-          {activeTab === 'incomeStreams' && <IncomeStreamsTab t={t} />}
+          {activeTab === 'incomeStreams' && 
+            <IncomeStreamsTab 
+              t={t} 
+              incomeStreams={incomeStreams}
+              setIncomeStreams={setIncomeStreams}
+              currency={currency}
+              language={language}
+            />
+          }
+          
           {activeTab === 'fixedCosts' && <FixedCostsTab t={t} />}
         </main>
       </div>
