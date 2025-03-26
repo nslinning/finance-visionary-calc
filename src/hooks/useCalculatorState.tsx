@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from 'react';
 import { 
   PRODUCT_CATEGORIES, 
@@ -30,7 +29,7 @@ import {
 
 export const useCalculatorState = (language: string = 'en', theme: string = 'light') => {
   const [periods, setPeriods] = useState(initialPeriods);
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [products, setProducts] = useState<Product[]>(initialProducts as Product[]);
   const [incomeStreams, setIncomeStreams] = useState(initialIncomeStreams);
   const [fixedCosts, setFixedCosts] = useState(initialFixedCosts);
   const [vatRate, setVatRate] = useState(0.25);

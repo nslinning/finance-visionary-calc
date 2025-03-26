@@ -1,4 +1,3 @@
-
 // TypeScript interface for income stream value types
 export interface SubscriptionValue {
   periodId: number;
@@ -24,7 +23,6 @@ export interface BaseProduct {
   cost: number;
   margin: number;
   marginPercentage: number;
-  type: string;
   category: string;
   revenueType: string;
   averageReorderRate: number;

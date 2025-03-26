@@ -1,4 +1,3 @@
-
 // More specific type for nested translations
 export interface ProductCategories {
   dtc: string;
@@ -12,6 +11,20 @@ export interface RevenueTypes {
   license: string;
   subscription: string;
   service: string;
+}
+
+export interface FixedCostCategories {
+  personnel: string;
+  facilities: string;
+  marketing: string;
+  [key: string]: string;
+}
+
+export interface FixedCostTypes {
+  personnel: string;
+  facilities: string;
+  marketing: string;
+  [key: string]: string;
 }
 
 export interface TranslationObject {
@@ -98,6 +111,12 @@ export interface TranslationObject {
   dark: string;
   productCategories: ProductCategories;
   revenueTypes: RevenueTypes;
+  fixedCostCategories: FixedCostCategories;
+  fixedCostTypes: FixedCostTypes;
+  period: string;
+  amount: string;
+  totalFixedCosts: string;
+  totalFixedCostsSummary: string;
 }
 
 // Language translations with proper typing
@@ -197,7 +216,21 @@ export const translations: {
       license: 'License-based',
       subscription: 'Subscription-based',
       service: 'Service-based'
-    }
+    },
+    fixedCostCategories: {
+      personnel: 'Personnel',
+      facilities: 'Facilities',
+      marketing: 'Marketing'
+    },
+    fixedCostTypes: {
+      personnel: 'Personnel Costs',
+      facilities: 'Facility Costs',
+      marketing: 'Marketing Costs'
+    },
+    period: 'Period',
+    amount: 'Amount',
+    totalFixedCosts: 'Total Fixed Costs',
+    totalFixedCostsSummary: 'Total fixed costs across all categories for the latest period.'
   },
   no: {
     title: 'STO Kalkulator',
@@ -292,7 +325,21 @@ export const translations: {
       license: 'Lisensbasert',
       subscription: 'Abonnementsbasert',
       service: 'Tjenestebasert'
-    }
+    },
+    fixedCostCategories: {
+      personnel: 'Personell',
+      facilities: 'Fasiliteter',
+      marketing: 'Markedsføring'
+    },
+    fixedCostTypes: {
+      personnel: 'Personellkostnader',
+      facilities: 'Fasilitetskostnader',
+      marketing: 'Markedsføringskostnader'
+    },
+    period: 'Periode',
+    amount: 'Beløp',
+    totalFixedCosts: 'Totale faste kostnader',
+    totalFixedCostsSummary: 'Totale faste kostnader for alle kategorier i siste periode.'
   }
 };
 
@@ -341,7 +388,6 @@ export const CURRENCY_SYMBOLS = {
   SEK: 'kr'
 };
 
-// Initial periods (e.g., quarters or months)
 export const initialPeriods = [
   { id: 1, label: 'Q1 2023', date: new Date(2023, 2, 31) },
   { id: 2, label: 'Q2 2023', date: new Date(2023, 5, 30) },
@@ -351,7 +397,6 @@ export const initialPeriods = [
   { id: 6, label: 'Q2 2024', date: new Date(2024, 5, 30) }
 ];
 
-// Initial sample products
 export const initialProducts = [
   {
     id: 1,
@@ -425,7 +470,6 @@ export const initialProducts = [
   }
 ];
 
-// Initial income streams
 export const initialIncomeStreams = [
   {
     id: 1,
@@ -471,7 +515,6 @@ export const initialIncomeStreams = [
   }
 ];
 
-// Initial fixed costs
 export const initialFixedCosts = [
   {
     id: 1,

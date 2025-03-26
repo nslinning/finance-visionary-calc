@@ -91,7 +91,7 @@ const FixedCostsTab: React.FC<FixedCostsTabProps> = ({
       {Object.entries(costsByCategory).map(([category, costs]) => (
         <div key={category} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4">
           <h3 className="text-lg font-semibold mb-3 border-b pb-2 dark:border-gray-700 flex justify-between">
-            <span>{t.fixedCostCategories[category]}</span>
+            <span>{t.fixedCostCategories[category as keyof typeof t.fixedCostCategories]}</span>
             <span className="text-gray-500 dark:text-gray-400">
               {formatCurrency(totalCostsByCategory[category], currency, language)}
             </span>
@@ -108,7 +108,7 @@ const FixedCostsTab: React.FC<FixedCostsTabProps> = ({
                     <div>
                       <h4 className="font-medium">{cost.name}</h4>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {t.fixedCostTypes[cost.category]}
+                        {t.fixedCostTypes[cost.category as keyof typeof t.fixedCostTypes]}
                       </p>
                     </div>
                     
