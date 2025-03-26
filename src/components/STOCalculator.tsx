@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -41,8 +40,8 @@ import DashboardTab from './Dashboard/DashboardTab';
 import ProductsTab from './Products/ProductsTab';
 import ProductModal from './Products/ProductModal';
 import SettingsModal from './Settings/SettingsModal';
-import { FixedCostsTab } from './Placeholders/PlaceholderTabs';
 import IncomeStreamsTab from './IncomeStreams/IncomeStreamsTab';
+import FixedCostsTab from './FixedCosts/FixedCostsTab';
 
 // Main component
 const STOCalculator = () => {
@@ -65,13 +64,10 @@ const STOCalculator = () => {
   const [theme, setTheme] = useState('light');
   const [showSettings, setShowSettings] = useState(false);
   
-  // New product state
   const [newProduct, setNewProduct] = useState<NewProduct>(defaultNewProduct);
   
-  // Get translations based on selected language
   const t = translations[language];
 
-  // Get category names with translations
   const getProductCategories = useMemo(() => {
     return PRODUCT_CATEGORIES.map(cat => ({
       ...cat,
@@ -79,7 +75,6 @@ const STOCalculator = () => {
     }));
   }, [language]);
 
-  // Get revenue type names with translations
   const getRevenueTypes = useMemo(() => {
     return REVENUE_TYPES.map(type => ({
       ...type,
@@ -87,12 +82,10 @@ const STOCalculator = () => {
     }));
   }, [language]);
   
-  // Apply theme
   useEffect(() => {
     document.documentElement.classList.toggle('dark-theme', theme === 'dark');
   }, [theme]);
   
-  // Calculate results whenever inputs change
   useEffect(() => {
     const calculatedResults = calculateResults(periods, incomeStreams, products, fixedCosts, vatRate);
     setResults(calculatedResults);
@@ -101,13 +94,11 @@ const STOCalculator = () => {
     setCashFlowResults(cashFlow);
   }, [periods, products, incomeStreams, fixedCosts, vatRate]);
   
-  // Calculate product metrics
   useEffect(() => {
     const metrics = calculateProductMetrics(products);
     setProductMetrics(metrics);
   }, [products]);
 
-  // Toggle specific product metric expansion
   const toggleMetricExpansion = (productId: number) => {
     setExpandedMetrics({
       ...expandedMetrics,
@@ -115,7 +106,6 @@ const STOCalculator = () => {
     });
   };
   
-  // Edit a product
   const editProduct = (productId: number) => {
     const product = products.find(p => p.id === productId);
     if (product) {
@@ -125,7 +115,6 @@ const STOCalculator = () => {
     }
   };
   
-  // Update existing product
   const updateProduct = () => {
     if (!editingProduct) return;
     
@@ -136,7 +125,6 @@ const STOCalculator = () => {
     const margin = editingProduct.price - cost;
     const marginPercentage = editingProduct.price > 0 ? margin / editingProduct.price : 0;
     
-    // Create updated product with recalculated values
     const updatedProduct = {
       ...editingProduct,
       cost,
@@ -144,31 +132,24 @@ const STOCalculator = () => {
       marginPercentage
     };
     
-    // Update products state
     setProducts(products.map(p => 
       p.id === updatedProduct.id ? updatedProduct : p
     ));
     
-    // Close modal
     setShowModal(false);
     setEditingProduct(null);
   };
   
-  // Add new product
   const addNewProduct = () => {
-    // Calculate costs based on product type
     const cost = newProduct.type === 'product'
       ? (newProduct.productionCost + newProduct.logisticsCost + newProduct.marketingCost)
       : (newProduct.operationalCost + newProduct.marketingCost);
     
-    // Calculate margin
     const margin = newProduct.price - cost;
     const marginPercentage = newProduct.price > 0 ? margin / newProduct.price : 0;
     
-    // Assign an ID to the new product
     const newId = Math.max(0, ...products.map(p => p.id)) + 1;
     
-    // Create product object with all properties
     const productToAdd: Product = {
       ...newProduct,
       id: newId,
@@ -179,22 +160,17 @@ const STOCalculator = () => {
       type: newProduct.type as 'product' | 'service'
     } as Product;
     
-    // Add product to state
     setProducts([...products, productToAdd]);
     
-    // Reset form
     setNewProduct(defaultNewProduct);
     
-    // Close modal
     setShowModal(false);
   };
   
-  // Delete a product
   const deleteProduct = (productId: number) => {
     setProducts(products.filter(p => p.id !== productId));
   };
   
-  // Update new product form state
   const updateNewProductState = (field: string, value: any) => {
     setNewProduct({
       ...newProduct,
@@ -202,7 +178,6 @@ const STOCalculator = () => {
     });
   };
   
-  // Update editing product form state
   const updateEditingProductState = (field: string, value: any) => {
     if (editingProduct) {
       setEditingProduct({
@@ -212,7 +187,6 @@ const STOCalculator = () => {
     }
   };
   
-  // Filter products by category
   const filteredProducts = useMemo(() => {
     if (filteredCategory === 'all') {
       return products;
@@ -220,22 +194,17 @@ const STOCalculator = () => {
     return products.filter(p => p.category === filteredCategory);
   }, [products, filteredCategory]);
   
-  // Calculate summary metrics
   const summaryMetrics = useMemo(() => {
     if (results.length === 0) return null;
     
-    // Total revenue across all periods
     const totalRevenue = results.reduce((sum, r) => sum + r.revenue, 0);
     
-    // Average gross margin percentage
     const avgGrossMargin = results.reduce((sum, r) => sum + r.grossMarginPercentage, 0) / results.length;
     
-    // Ending liquidity (last period's cumulative cash flow)
     const endingLiquidity = cashFlowResults.length > 0 
       ? cashFlowResults[cashFlowResults.length - 1].cumulativeCashFlow || 0
       : 0;
     
-    // Latest operating result
     const latestOperatingResult = results.length > 0
       ? results[results.length - 1].operatingResult
       : 0;
@@ -248,19 +217,15 @@ const STOCalculator = () => {
     };
   }, [results, cashFlowResults]);
   
-  // Calculate category-specific metrics
   const categoryMetrics = useMemo(() => {
-    // Group revenue by category
     const revenueByCategory: Record<string, number> = {};
     
-    // Process income streams
     incomeStreams.forEach(stream => {
       const category = stream.category;
       if (!revenueByCategory[category]) {
         revenueByCategory[category] = 0;
       }
       
-      // Sum up revenue across all periods
       stream.values.forEach(value => {
         if ('revenue' in value) {
           revenueByCategory[category] += value.revenue;
@@ -270,7 +235,6 @@ const STOCalculator = () => {
       });
     });
     
-    // Calculate average metrics by category
     const metricsByCategory: Record<string, CategoryMetrics> = {};
     
     PRODUCT_CATEGORIES.forEach(cat => {
@@ -302,13 +266,11 @@ const STOCalculator = () => {
     return metricsByCategory;
   }, [products, incomeStreams, productMetrics]);
 
-  // Open the add product modal
   const openAddProductModal = () => {
     setModalType('addProduct');
     setShowModal(true);
   };
 
-  // Get translation wrappers for component props
   const translateCategoryName = (categoryId: string): string => {
     return getCategoryName(categoryId, language);
   };
@@ -317,7 +279,6 @@ const STOCalculator = () => {
     return getRevenueTypeName(typeId, language);
   };
   
-  // Render the modals based on modal type
   const renderModal = () => {
     if (modalType === 'editProduct') {
       return (
@@ -356,7 +317,6 @@ const STOCalculator = () => {
     return null;
   };
   
-  // Main render
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       <header className="bg-white dark:bg-gray-800 shadow">
@@ -462,11 +422,18 @@ const STOCalculator = () => {
             />
           }
           
-          {activeTab === 'fixedCosts' && <FixedCostsTab t={t} />}
+          {activeTab === 'fixedCosts' && 
+            <FixedCostsTab 
+              t={t} 
+              fixedCosts={fixedCosts}
+              setFixedCosts={setFixedCosts}
+              currency={currency}
+              language={language}
+            />
+          }
         </main>
       </div>
       
-      {/* Modals */}
       <AnimatePresence>
         {showModal && (
           <motion.div

@@ -20,7 +20,7 @@ const IncomeStreamsTab: React.FC<IncomeStreamsTabProps> = ({
   currency,
   language
 }) => {
-  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [editIndex, setEditIndex] = useState<string | null>(null);
   
   const updateIncomeStreamValue = (streamId: number, periodId: number, field: string, value: number) => {
     setIncomeStreams(prevStreams => {
