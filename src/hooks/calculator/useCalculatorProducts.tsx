@@ -12,9 +12,9 @@ import {
 } from '../../utils/calculator';
 import { 
   PRODUCT_CATEGORIES, 
-  REVENUE_TYPES,
-  defaultNewProduct
-} from '../../constants/calculator';
+  REVENUE_TYPES
+} from '../../constants/calculator/categories';
+import { defaultNewProduct } from '../../constants/calculator/initialData';
 
 export const useCalculatorProducts = (language: string) => {
   const [products, setProducts] = useState<Product[]>([] as Product[]);

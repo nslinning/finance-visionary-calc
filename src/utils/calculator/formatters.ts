@@ -1,5 +1,6 @@
 
-import { CURRENCY_RATES, CURRENCY_SYMBOLS, translations } from '../../constants/calculator';
+import { CURRENCY_RATES, CURRENCY_SYMBOLS } from '../../constants/calculator/currency';
+import { translations } from '../../constants/calculator/translations';
 
 // Format number with currency
 export const formatCurrency = (num: number, currency: string, language: string) => {

@@ -1,5 +1,5 @@
 
-import { ProductCategories, RevenueTypes, FixedCostCategories, FixedCostTypes, TranslationObject } from '../types';
+import { ProductCategories, RevenueTypes, FixedCostCategories, FixedCostTypes, TranslationObject } from './types';
 
 // Language translations with proper typing
 export const translations: {

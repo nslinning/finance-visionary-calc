@@ -11,7 +11,7 @@ import {
   initialPeriods, 
   initialIncomeStreams, 
   initialFixedCosts
-} from '../../constants/calculator';
+} from '../../constants/calculator/initialData';
 
 export const useCalculatorData = () => {
   const [periods, setPeriods] = useState<Period[]>(initialPeriods);
