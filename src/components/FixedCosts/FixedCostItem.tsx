@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { FixedCost } from '../../types/calculator';
-import { formatCurrency } from '../../utils/calculatorUtils';
+import { formatCurrency } from '../../utils/calculator';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 
 interface FixedCostItemProps {
