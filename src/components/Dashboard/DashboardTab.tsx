@@ -5,7 +5,7 @@ import {
   BarChart, Bar, ReferenceLine, ComposedChart, Cell, AreaChart, Area
 } from 'recharts';
 import { Activity, Briefcase, CreditCard, TrendingUp } from 'lucide-react';
-import { COLORS } from '../../constants/calculator';
+import { COLORS } from '../../constants/calculator/categories';
 import { formatCurrency } from '../../utils/calculator';
 import { TranslationObject } from '../../constants/calculator';
 import { CategoryMetrics, CashFlowResult, ResultData, SummaryMetrics } from '../../types/calculator';

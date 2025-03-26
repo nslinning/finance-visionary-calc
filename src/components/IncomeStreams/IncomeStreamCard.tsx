@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { TranslationObject } from '../../constants/calculator';
 import { IncomeStream, SubscriptionValue, SalesValue } from '../../types/calculator';
 import { TrendingUp, TrendingDown } from 'lucide-react';
-import { formatCurrency } from '../../utils/calculatorUtils';
+import { formatCurrency } from '../../utils/calculator';
 
 interface IncomeStreamCardProps {
   stream: IncomeStream;
@@ -22,17 +21,14 @@ const IncomeStreamCard: React.FC<IncomeStreamCardProps> = ({
 }) => {
   const [editIndex, setEditIndex] = useState<string | null>(null);
   
-  // Calculate growth rates for visual indicators
   const getGrowthRate = (stream: IncomeStream): number => {
     if (stream.values.length < 2) return 0;
     
-    // Get the last two periods
     const sortedValues = [...stream.values].sort((a, b) => a.periodId - b.periodId);
     const lastPeriod = sortedValues[sortedValues.length - 1];
     const prevPeriod = sortedValues[sortedValues.length - 2];
     
     if (stream.type === 'subscription') {
-      // For subscription streams
       const lastValue = lastPeriod as SubscriptionValue;
       const prevValue = prevPeriod as SubscriptionValue;
       
@@ -42,7 +38,6 @@ const IncomeStreamCard: React.FC<IncomeStreamCardProps> = ({
       if (prevRevenue === 0) return 0;
       return (lastRevenue - prevRevenue) / prevRevenue;
     } else {
-      // For sales streams
       const lastValue = lastPeriod as SalesValue;
       const prevValue = prevPeriod as SalesValue;
       
@@ -54,16 +49,13 @@ const IncomeStreamCard: React.FC<IncomeStreamCardProps> = ({
   const getLatestValue = (stream: IncomeStream): number => {
     if (stream.values.length === 0) return 0;
     
-    // Get the latest period
     const sortedValues = [...stream.values].sort((a, b) => b.periodId - a.periodId);
     const lastPeriod = sortedValues[0];
     
     if (stream.type === 'subscription') {
-      // For subscription streams
       const value = lastPeriod as SubscriptionValue;
       return value.subscribers * value.averageRevenue;
     } else {
-      // For sales streams
       const value = lastPeriod as SalesValue;
       return value.revenue;
     }
