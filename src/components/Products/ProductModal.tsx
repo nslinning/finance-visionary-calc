@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { TranslationObject } from '../../constants/calculator';
+import { TranslationObject } from '../../constants/calculator/types';
 import { Product, NewProduct } from '../../types/calculator';
 
 interface ProductModalProps {

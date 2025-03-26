@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { TranslationObject } from '../../constants/calculator';
+import { TranslationObject } from '../../constants/calculator/types';
 import { IncomeStream, SubscriptionValue, SalesValue } from '../../types/calculator';
 import CategorySection from './CategorySection';
 

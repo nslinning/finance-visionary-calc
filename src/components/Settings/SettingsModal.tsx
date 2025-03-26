@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { TranslationObject } from '../../constants/calculator';
+import { TranslationObject } from '../../constants/calculator/types';
 import { DollarSign, Euro, Currency } from 'lucide-react';
 
 interface SettingsModalProps {

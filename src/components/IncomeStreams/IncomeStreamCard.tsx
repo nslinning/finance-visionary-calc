@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { TranslationObject } from '../../constants/calculator';
+import { TranslationObject } from '../../constants/calculator/types';
 import { IncomeStream, SubscriptionValue, SalesValue } from '../../types/calculator';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { formatCurrency } from '../../utils/calculator';

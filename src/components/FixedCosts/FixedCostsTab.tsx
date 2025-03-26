@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { TranslationObject } from '../../constants/calculator';
+import { TranslationObject } from '../../constants/calculator/types';
 import { FixedCost } from '../../types/calculator';
 import FixedCostCategory from './FixedCostCategory';
 import TotalFixedCosts from './TotalFixedCosts';

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Edit2, PlusCircle, Trash2 } from 'lucide-react';
 import { formatCurrency } from '../../utils/calculatorUtils';
-import { TranslationObject } from '../../constants/calculator';
+import { TranslationObject } from '../../constants/calculator/types';
 import { Product, ProductMetric } from '../../types/calculator';
 
 interface ProductsTabProps {

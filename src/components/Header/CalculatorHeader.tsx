@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Settings } from 'lucide-react';
-import { TranslationObject } from '../../constants/calculator';
+import { TranslationObject } from '../../constants/calculator/types';
 
 interface CalculatorHeaderProps {
   t: TranslationObject;
