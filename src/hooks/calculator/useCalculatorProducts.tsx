@@ -9,7 +9,7 @@ import {
   calculateProductMetrics,
   getCategoryName,
   getRevenueTypeName
-} from '../../utils/calculatorUtils';
+} from '../../utils/calculator';
 import { 
   PRODUCT_CATEGORIES, 
   REVENUE_TYPES,

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { FixedCost } from '../../types/calculator';
-import { formatCurrency } from '../../utils/calculatorUtils';
+import { formatCurrency } from '../../utils/calculator';
 import FixedCostItem from './FixedCostItem';
 
 interface FixedCostCategoryProps {

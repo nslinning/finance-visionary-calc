@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Calculator } from 'lucide-react';
-import { formatCurrency } from '../../utils/calculatorUtils';
+import { formatCurrency } from '../../utils/calculator';
 
 interface TotalFixedCostsProps {
   totalFixedCosts: number;

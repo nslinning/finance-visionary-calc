@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from 'react';
 import { 
   Period, 
@@ -12,7 +11,7 @@ import {
 import { 
   calculateResults,
   calculateCashFlow
-} from '../../utils/calculatorUtils';
+} from '../../utils/calculator';
 
 export const useCalculatorFinancials = (
   periods: Period[],
@@ -24,7 +23,6 @@ export const useCalculatorFinancials = (
   const [results, setResults] = useState<ResultData[]>([]);
   const [cashFlowResults, setCashFlowResults] = useState<CashFlowResult[]>([]);
   
-  // Calculate results and cash flows whenever inputs change
   useEffect(() => {
     const calculatedResults = calculateResults(periods, incomeStreams, products, fixedCosts, vatRate);
     setResults(calculatedResults);
@@ -33,7 +31,6 @@ export const useCalculatorFinancials = (
     setCashFlowResults(cashFlow);
   }, [periods, products, incomeStreams, fixedCosts, vatRate]);
   
-  // Compute summary metrics from results
   const summaryMetrics = useMemo<SummaryMetrics | null>(() => {
     if (results.length === 0) return null;
     
@@ -57,7 +54,6 @@ export const useCalculatorFinancials = (
     };
   }, [results, cashFlowResults]);
   
-  // Compute metrics by category
   const categoryMetrics = useMemo<Record<string, CategoryMetrics>>(() => {
     const revenueByCategory: Record<string, number> = {};
     
@@ -76,11 +72,7 @@ export const useCalculatorFinancials = (
       });
     });
     
-    // Rest of category metrics calculation
     const metricsByCategory: Record<string, any> = {};
-    
-    // This would map from the productMetrics we get from useCalculatorProducts
-    // Since we split the hooks, we'll get this from the parent component instead
     
     return metricsByCategory;
   }, [incomeStreams]);
