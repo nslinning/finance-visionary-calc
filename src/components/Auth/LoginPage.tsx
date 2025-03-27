@@ -4,27 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
 import { Lock } from 'lucide-react';
 
-// The password hash (this is a simple hash, in production you would use a better hashing algorithm)
-const CORRECT_PASSWORD_HASH = '8c71f3fbf6ac2b514ba1dcbbf4125d10'; // Hash of "Batactqav9-10A"
+// The correct password (for testing purposes only)
+const CORRECT_PASSWORD = "Batactqav9-10A";
 
 const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
-  // Simple hash function (not secure for production)
-  const hashPassword = (password: string) => {
-    let hash = 0;
-    if (password.length === 0) return hash.toString(16);
-    
-    for (let i = 0; i < password.length; i++) {
-      const char = password.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32bit integer
-    }
-    
-    return Math.abs(hash).toString(16);
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,9 +18,7 @@ const LoginPage: React.FC = () => {
     
     // Simulate delay to show loading state
     setTimeout(() => {
-      const hashedPassword = hashPassword(password);
-      
-      if (hashedPassword === CORRECT_PASSWORD_HASH) {
+      if (password === CORRECT_PASSWORD) {
         localStorage.setItem('calculator_authorized', 'true');
         navigate('/calculator');
       } else {
