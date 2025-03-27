@@ -95,5 +95,59 @@ export const defaultNewSegment = {
   volumeDiscountRate: 0,
   contractLengthDiscountRate: 0,
   customDiscountRate: 0,
-  employeeCount: 1
+  employeeCount: 1,
+  
+  // New fields for hardware options
+  includesHardware: false,
+  hardwareAcquisitionType: 'purchase' as const,
+  leaseInterestRate: 5.0, // Default 5% interest rate
+  
+  // Subscription type
+  subscriptionType: 'arr-commitment' as const,
+  
+  // Is this an individual customer
+  isIndividualCustomer: false,
+  
+  // Default calculation purpose
+  calculationPurpose: 'offer' as const
 };
+
+export const subscriptionTiers = [
+  {
+    id: 'essential',
+    name: 'Essential',
+    monthlyPricePerUser: 500,
+    features: [
+      'Basic workplace wellness assessment',
+      'Standard product access via ASD lockers',
+      'Privacy-focused anonymous access',
+      'Basic compliance documentation'
+    ]
+  },
+  {
+    id: 'professional',
+    name: 'Professional',
+    monthlyPricePerUser: 800,
+    features: [
+      'Advanced wellness analytics',
+      'Home delivery options',
+      'ISO 45010 compliance tools',
+      'ESG reporting dashboard',
+      'Blockchain-secured privacy'
+    ]
+  },
+  {
+    id: 'enterprise',
+    name: 'Enterprise',
+    monthlyPricePerUser: 1500, // Custom pricing, but we set a default
+    features: [
+      'Full wellness ecosystem',
+      'Integration with corporate systems',
+      'ROI & Impact calculator module',
+      'Advanced ESG/CSRD reporting',
+      'Dedicated success manager',
+      'Custom AI-powered analytics'
+    ]
+  }
+];
+

@@ -5,9 +5,9 @@ export interface ProductCategories {
   dtb: string;
   reseller: string;
   software: string;
-  b2b?: string;  // Legger til b2b
-  b2c?: string;  // Legger til b2c
-  b2b2c?: string;  // Legger til b2b2c
+  b2b?: string;
+  b2c?: string;
+  b2b2c?: string;
 }
 
 export interface RevenueTypes {
@@ -123,7 +123,8 @@ export interface TranslationObject {
   amount: string;
   totalFixedCosts: string;
   totalFixedCostsSummary: string;
-  // Nye egenskaper for kundesegmenter
+  
+  // Customer segments
   addNewSegment: string;
   editSegment: string;
   segmentName: string;
@@ -143,7 +144,8 @@ export interface TranslationObject {
   b2b: string;
   b2c: string;
   b2b2c: string;
-  // Nye egenskaper for tidslinjeplanlegging
+  
+  // Timeline planning
   timelineStartDate: string;
   timelineDuration: string;
   timelineInterval: string;
@@ -153,6 +155,7 @@ export interface TranslationObject {
   applyTimeline: string;
   setStartDate?: string;
   discountBasedOn?: string;
+  
   // Dashboard welcome screen
   welcomeToDashboard: string;
   dashboardInstructions: string;
@@ -160,7 +163,79 @@ export interface TranslationObject {
   firstStepDescription: string;
   secondStepTitle: string;
   secondStepDescription: string;
-  // Nye knapper for velkomstskjermen
   startWithTimeline: string;
   addProducts: string;
+  
+  // Hardware options
+  basicInfo: string;
+  pricingOptions: string;
+  hardwareOptions: string;
+  includeHardware: string;
+  hardwareAcquisitionType: string;
+  hardwareProduct: string;
+  selectHardwareAcquisitionType: string;
+  purchase: string;
+  rent: string;
+  lease: string;
+  leaseInterestRate: string;
+  leaseRequiresCommitment: string;
+  leaseMinimumContractLength: string;
+  selectHardware: string;
+  subscriptionType: string;
+  selectSubscriptionType: string;
+  mrrNoCommitment: string;
+  arrWithCommitment: string;
+  
+  // Individual customer
+  addIndividualCustomer: string;
+  isIndividualCustomer: string;
+  customerName: string;
+  customerEmail: string;
+  customerDetails: string;
+  calculationPurpose: string;
+  createOffer: string;
+  calculateValue: string;
+  selectPurpose: string;
+  
+  // Segments and individual customers
+  segments: string;
+  individualCustomers: string;
+  noCustomerSegments: string;
+  noIndividualCustomers: string;
+  noCustomerSegmentsOrIndividuals: string;
+  individualCustomer: string;
+  
+  // Hardware details
+  hardwareDetails: string;
+  hardware: string;
+  acquisitionType: string;
+  interestRate: string;
+  
+  // Export functionality
+  export: string;
+  exportResults: string;
+  exportResultsDescription: string;
+  exportFormat: string;
+  selectFormat: string;
+  contentToInclude: string;
+  includeGraphs: string;
+  includeFinancials: string;
+  includeCustomerSegments: string;
+  includeProducts: string;
+  exportPreparing: string;
+  exportPreparingDescription: string;
+  exportReady: string;
+  exportReadyDescription: string;
+  
+  // Subscription tiers
+  subscriptionTiers: string;
+  userMonth: string;
+  moreFeatures: string;
+  licenseFeePricePerUser: string;
+  
+  // Monthly fee per user
+  monthlyPerUserFee: string;
+  
+  // Form messages
+  email: string;
 }

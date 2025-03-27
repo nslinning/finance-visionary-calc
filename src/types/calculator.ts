@@ -141,6 +141,10 @@ export interface NewProduct {
   acquisitionCost: number;
 }
 
+export type HardwareAcquisitionType = 'purchase' | 'rent' | 'lease';
+
+export type SubscriptionCommitmentType = 'mrr-no-commitment' | 'arr-commitment';
+
 export interface CustomerSegment {
   id: number;
   name: string;
@@ -152,4 +156,30 @@ export interface CustomerSegment {
   contractLengthDiscountRate: number; // percentage
   customDiscountRate: number; // percentage
   employeeCount: number;
+  
+  // New fields for hardware options
+  includesHardware: boolean;
+  hardwareAcquisitionType?: HardwareAcquisitionType;
+  hardwareId?: number; // Reference to the hardware product
+  leaseInterestRate?: number; // Interest rate for leasing
+  
+  // New fields for commitment type
+  subscriptionType: SubscriptionCommitmentType;
+  
+  // Purpose of the calculation
+  calculationPurpose?: 'offer' | 'valuation';
+  
+  // New field for customer name if this is an individual customer
+  isIndividualCustomer: boolean;
+  customerName?: string;
+  customerEmail?: string;
 }
+
+export interface ExportOptions {
+  format: 'pdf' | 'excel';
+  includeGraphs: boolean;
+  includeFinancials: boolean;
+  includeCustomerSegments: boolean;
+  includeProducts: boolean;
+}
+

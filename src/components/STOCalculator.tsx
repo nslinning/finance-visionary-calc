@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // Import custom hooks and types
 import { useCalculatorState } from '../hooks/useCalculatorState';
+import { ExportOptions } from '../types/calculator';
 
 // Import components
 import CalculatorHeader from './Header/CalculatorHeader';
@@ -16,11 +17,15 @@ import IncomeStreamsTab from './IncomeStreams/IncomeStreamsTab';
 import FixedCostsTab from './FixedCosts/FixedCostsTab';
 import TimelinePlanningTab from './Timeline/TimelinePlanningTab';
 import CustomerSegmentsTab from './CustomerSegments/CustomerSegmentsTab';
+import ExportResults from './Export/ExportResults';
+import { useToast } from '@/components/ui/use-toast';
 
 // Main component
 const STOCalculator = () => {
   const [language, setLanguage] = useState('no'); // Norwegian as default
   const [theme, setTheme] = useState('light');
+  const [showExport, setShowExport] = useState(false);
+  const { toast } = useToast();
   
   const {
     activeTab,
@@ -68,6 +73,22 @@ const STOCalculator = () => {
     translateCategoryName
   } = useCalculatorState(language, theme);
   
+  const handleExport = (options: ExportOptions) => {
+    // In a real application, this would generate the export
+    toast({
+      title: t.exportPreparing,
+      description: t.exportPreparingDescription,
+    });
+    
+    // Mock a delay for export generation
+    setTimeout(() => {
+      toast({
+        title: t.exportReady,
+        description: t.exportReadyDescription,
+      });
+    }, 2000);
+  };
+  
   const renderModal = () => {
     if (modalType === 'editProduct') {
       return (
@@ -106,7 +127,11 @@ const STOCalculator = () => {
   
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
-      <CalculatorHeader t={t} setShowSettings={setShowSettings} />
+      <CalculatorHeader 
+        t={t} 
+        setShowSettings={setShowSettings} 
+        setShowExport={setShowExport}
+      />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} t={t} />
@@ -213,6 +238,15 @@ const STOCalculator = () => {
               closeModal={() => setShowSettings(false)}
             />
           </motion.div>
+        )}
+        
+        {showExport && (
+          <ExportResults
+            t={t}
+            isOpen={showExport}
+            onClose={() => setShowExport(false)}
+            onExport={handleExport}
+          />
         )}
       </AnimatePresence>
     </div>
