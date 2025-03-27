@@ -1,5 +1,6 @@
 
 import { z } from "zod";
+import { type ZodError } from "zod";
 
 // Base schema definition
 export const customerSegmentSchema = z.object({
@@ -43,8 +44,13 @@ export const customerSegmentSchema = z.object({
 // Type for the form data
 export type CustomerSegmentFormData = z.infer<typeof customerSegmentSchema>;
 
-// Conditional validation function - returns a SafeParseReturn instead of a new schema
-export const validateCustomerSegmentForm = (data: any) => {
+// Define return type for validation function to ensure type safety
+type ValidationResult = 
+  | { success: true; data: CustomerSegmentFormData }
+  | { success: false; error: ZodError<any> };
+
+// Conditional validation function - returns a strongly typed validation result
+export const validateCustomerSegmentForm = (data: any): ValidationResult => {
   // Check hardware requirements if hardware is included
   if (data.includesHardware) {
     // Hardware acquisition type is required
@@ -99,5 +105,17 @@ export const validateCustomerSegmentForm = (data: any) => {
   }
   
   // Validate through the base schema
-  return customerSegmentSchema.safeParse(data);
+  const result = customerSegmentSchema.safeParse(data);
+  
+  if (result.success) {
+    return {
+      success: true,
+      data: result.data
+    };
+  }
+  
+  return {
+    success: false,
+    error: result.error
+  };
 };
