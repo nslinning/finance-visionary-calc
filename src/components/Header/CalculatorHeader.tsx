@@ -14,7 +14,7 @@ const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({ t, setShowSettings 
       <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            <span className="text-blue-600">SYDERA.IO</span> | STÖ
+            <span className="text-blue-600">STÖ ANALYTICS</span>
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">{t.subtitle}</p>
         </div>
