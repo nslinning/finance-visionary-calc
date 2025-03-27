@@ -1,3 +1,4 @@
+
 // TypeScript interface for translation object structure
 export interface ProductCategories {
   dtc: string;
@@ -152,4 +153,11 @@ export interface TranslationObject {
   applyTimeline: string;
   setStartDate?: string;
   discountBasedOn?: string;
+  // Dashboard welcome screen
+  welcomeToDashboard: string;
+  dashboardInstructions: string;
+  firstStepTitle: string;
+  firstStepDescription: string;
+  secondStepTitle: string;
+  secondStepDescription: string;
 }

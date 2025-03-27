@@ -1,4 +1,5 @@
-import { TranslationObject } from '../types';
+
+import { TranslationObject, ProductCategories, RevenueTypes, FixedCostCategories, FixedCostTypes } from '../types';
 
 const productCategories: ProductCategories = {
   dtc: 'Direct-to-Consumer (DTC)',
