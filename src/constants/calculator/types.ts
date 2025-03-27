@@ -1,4 +1,3 @@
-
 // TypeScript interface for translation object structure
 export interface ProductCategories {
   dtc: string;
@@ -151,4 +150,5 @@ export interface TranslationObject {
   quarter: string;
   month: string;
   applyTimeline: string;
+  setStartDate?: string;
 }
