@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { CustomerSegment } from '../types/calculator';
-import { defaultNewSegment } from '../constants/calculator/initialData';
+import { defaultNewSegment } from '../constants/calculator/data';
 import { validateCustomerSegmentForm, ValidationResult } from '../validation/customerSegmentSchema';
 import { toast } from '@/components/ui/use-toast';
 
@@ -134,4 +134,4 @@ export const useCustomerSegmentForm = (
 };
 
 // Import from original file
-import { subscriptionTiers } from '../constants/calculator/initialData';
+import { subscriptionTiers } from '../constants/calculator/data';

@@ -1,6 +1,7 @@
+
 import { useState, useEffect, useMemo } from 'react';
 import { translations } from '../constants/calculator/translations';
-import { initialProducts } from '../constants/calculator/initialData';
+import { initialProducts } from '../constants/calculator/data';
 import { Product, ProductMetric, CustomerSegment } from '../types/calculator';
 import { 
   calculateProductMetrics,

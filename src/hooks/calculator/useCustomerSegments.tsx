@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { CustomerSegment } from '../../types/calculator';
-import { demoCustomerSegment } from '../../constants/calculator/initialData';
+import { demoCustomerSegment } from '../../constants/calculator/data';
 
 export const useCustomerSegments = () => {
   const [segments, setSegments] = useState<CustomerSegment[]>([demoCustomerSegment]);

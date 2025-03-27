@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from 'react';
 import { 
   Product, 
@@ -14,7 +13,7 @@ import {
   PRODUCT_CATEGORIES, 
   REVENUE_TYPES
 } from '../../constants/calculator/categories';
-import { defaultNewProduct } from '../../constants/calculator/initialData';
+import { defaultNewProduct } from '../../constants/calculator/data';
 
 export const useCalculatorProducts = (language: string) => {
   const [products, setProducts] = useState<Product[]>([] as Product[]);
@@ -58,7 +57,6 @@ export const useCalculatorProducts = (language: string) => {
     const product = products.find(p => p.id === productId);
     if (product) {
       setEditingProduct(product);
-      // Fixed: Return null here since we no longer need to return the product
       return null;
     }
     return null;
@@ -81,12 +79,10 @@ export const useCalculatorProducts = (language: string) => {
       marginPercentage
     };
     
-    // Update the products array with the updated product
     setProducts(products.map(p => 
       p.id === updatedProduct.id ? updatedProduct : p
     ));
     
-    // Clear the editing product
     setEditingProduct(null);
     
     return updatedProduct;
