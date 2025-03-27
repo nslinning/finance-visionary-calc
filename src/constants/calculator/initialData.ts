@@ -1,4 +1,4 @@
-import { NewProduct, CustomerSegment } from '../types/calculator';
+import { NewProduct, CustomerSegment, Period, IncomeStream, FixedCost } from '../../types/calculator';
 
 // Initial products data
 export const initialProducts: NewProduct[] = [
@@ -185,3 +185,19 @@ export const subscriptionTiers = [
     ]
   }
 ];
+
+// Initial periods data
+export const initialPeriods: Period[] = [
+  { id: 1, label: 'Q1 2023', date: new Date(2023, 0, 1) },
+  { id: 2, label: 'Q2 2023', date: new Date(2023, 3, 1) },
+  { id: 3, label: 'Q3 2023', date: new Date(2023, 6, 1) },
+  { id: 4, label: 'Q4 2023', date: new Date(2023, 9, 1) },
+  { id: 5, label: 'Q1 2024', date: new Date(2024, 0, 1) },
+  { id: 6, label: 'Q2 2024', date: new Date(2024, 3, 1) }
+];
+
+// Initial income streams data
+export const initialIncomeStreams: IncomeStream[] = [];
+
+// Initial fixed costs data
+export const initialFixedCosts: FixedCost[] = [];
