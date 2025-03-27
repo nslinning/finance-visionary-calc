@@ -2,8 +2,17 @@
 import React from 'react';
 import { TranslationObject } from '../../../constants/calculator/types';
 import { CustomerSegment, Product } from '../../../types/calculator';
+import { useFormContext } from 'react-hook-form';
+import { 
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
@@ -15,8 +24,6 @@ import {
 
 interface HardwareTabProps {
   t: TranslationObject;
-  formData: CustomerSegment;
-  handleChange: (field: string, value: any) => void;
   handleProductToggle: (productId: number) => void;
   products: Product[];
   hardwareProducts: Product[];
@@ -24,86 +31,120 @@ interface HardwareTabProps {
 
 const HardwareTab: React.FC<HardwareTabProps> = ({ 
   t, 
-  formData, 
-  handleChange, 
   handleProductToggle,
   products,
   hardwareProducts 
 }) => {
+  const { control, watch } = useFormContext();
+  const includesHardware = watch('includesHardware');
+  const hardwareAcquisitionType = watch('hardwareAcquisitionType');
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          id="includesHardware"
-          checked={formData.includesHardware}
-          onCheckedChange={(checked) => 
-            handleChange('includesHardware', checked === true)
-          }
-        />
-        <Label htmlFor="includesHardware">{t.includeHardware}</Label>
-      </div>
-      
-      {formData.includesHardware && (
-        <>
-          <div>
-            <Label htmlFor="hardwareAcquisitionType">{t.hardwareAcquisitionType}</Label>
-            <Select
-              value={formData.hardwareAcquisitionType}
-              onValueChange={(value) => handleChange('hardwareAcquisitionType', value)}
-            >
-              <SelectTrigger id="hardwareAcquisitionType" className="mt-1">
-                <SelectValue placeholder={t.selectHardwareAcquisitionType} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="purchase">{t.purchase}</SelectItem>
-                <SelectItem value="rent">{t.rent}</SelectItem>
-                <SelectItem value="lease">{t.lease}</SelectItem>
-              </SelectContent>
-            </Select>
-            
-            {formData.hardwareAcquisitionType === 'lease' && (
-              <p className="text-sm text-amber-600 mt-1">
-                {t.leaseRequiresCommitment}
-              </p>
-            )}
-          </div>
-          
-          <div>
-            <Label htmlFor="hardwareId">{t.hardwareProduct}</Label>
-            <Select
-              value={formData.hardwareId?.toString() || ''}
-              onValueChange={(value) => handleChange('hardwareId', parseInt(value))}
-            >
-              <SelectTrigger id="hardwareId" className="mt-1">
-                <SelectValue placeholder={t.selectHardware} />
-              </SelectTrigger>
-              <SelectContent>
-                {hardwareProducts.map(product => (
-                  <SelectItem key={product.id} value={product.id.toString()}>
-                    {product.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          {formData.hardwareAcquisitionType === 'lease' && (
-            <div>
-              <Label htmlFor="leaseInterestRate">{t.leaseInterestRate}</Label>
-              <div className="flex items-center mt-1">
-                <Input
-                  id="leaseInterestRate"
-                  type="number"
-                  value={formData.leaseInterestRate}
-                  onChange={(e) => handleChange('leaseInterestRate', parseFloat(e.target.value) || 5.0)}
-                  min={0}
-                  max={25}
-                  step={0.1}
-                  className="mr-2"
-                />
-                <span>%</span>
-              </div>
+      <FormField
+        control={control}
+        name="includesHardware"
+        render={({ field }) => (
+          <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 rounded-md border">
+            <FormControl>
+              <Checkbox
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            </FormControl>
+            <div className="space-y-1 leading-none">
+              <FormLabel>{t.includeHardware}</FormLabel>
             </div>
+          </FormItem>
+        )}
+      />
+      
+      {includesHardware && (
+        <>
+          <FormField
+            control={control}
+            name="hardwareAcquisitionType"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t.hardwareAcquisitionType}</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t.selectHardwareAcquisitionType} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="purchase">{t.purchase}</SelectItem>
+                    <SelectItem value="rent">{t.rent}</SelectItem>
+                    <SelectItem value="lease">{t.lease}</SelectItem>
+                  </SelectContent>
+                </Select>
+                {field.value === 'lease' && (
+                  <FormDescription className="text-amber-600">
+                    {t.leaseRequiresCommitment}
+                  </FormDescription>
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={control}
+            name="hardwareId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t.hardwareProduct}</FormLabel>
+                <Select
+                  onValueChange={(value) => field.onChange(parseInt(value))}
+                  defaultValue={field.value?.toString() || ''}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t.selectHardware} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {hardwareProducts.map(product => (
+                      <SelectItem key={product.id} value={product.id.toString()}>
+                        {product.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          {hardwareAcquisitionType === 'lease' && (
+            <FormField
+              control={control}
+              name="leaseInterestRate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t.leaseInterestRate}</FormLabel>
+                  <div className="flex items-center">
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 5.0)}
+                        min={0}
+                        max={25}
+                        step={0.1}
+                        className="mr-2"
+                      />
+                    </FormControl>
+                    <span>%</span>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           )}
         </>
       )}
@@ -115,15 +156,23 @@ const HardwareTab: React.FC<HardwareTabProps> = ({
           {products
             .filter(p => !p.name.includes('SYDERA') && !p.name.includes('VENDING'))
             .map(product => (
-            <div key={product.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`product-${product.id}`}
-                checked={formData.products.includes(product.id)}
-                onCheckedChange={() => handleProductToggle(product.id)}
+              <FormField
+                key={product.id}
+                control={control}
+                name="products"
+                render={({ field }) => (
+                  <FormItem key={product.id} className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value.includes(product.id)}
+                        onCheckedChange={() => handleProductToggle(product.id)}
+                      />
+                    </FormControl>
+                    <FormLabel className="font-normal">{product.name}</FormLabel>
+                  </FormItem>
+                )}
               />
-              <Label htmlFor={`product-${product.id}`}>{product.name}</Label>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>

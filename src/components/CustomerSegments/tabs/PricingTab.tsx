@@ -1,10 +1,18 @@
 
 import React from 'react';
 import { TranslationObject } from '../../../constants/calculator/types';
-import { CustomerSegment } from '../../../types/calculator';
 import { subscriptionTiers } from '../../../constants/calculator/initialData';
+import { useFormContext } from 'react-hook-form';
+import { 
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import {
   Select,
@@ -16,17 +24,19 @@ import {
 
 interface PricingTabProps {
   t: TranslationObject;
-  formData: CustomerSegment;
-  handleChange: (field: string, value: any) => void;
   handleSelectPriceTier: (tierId: string) => void;
 }
 
 const PricingTab: React.FC<PricingTabProps> = ({ 
   t, 
-  formData, 
-  handleChange, 
   handleSelectPriceTier 
 }) => {
+  const { control, watch } = useFormContext();
+  const includesHardware = watch('includesHardware');
+  const hardwareAcquisitionType = watch('hardwareAcquisitionType');
+  const contractLengthYears = watch('contractLengthYears');
+  const licenseFeePerUser = watch('licenseFeePerUser');
+
   return (
     <div className="space-y-6">
       <div>
@@ -36,7 +46,7 @@ const PricingTab: React.FC<PricingTabProps> = ({
             <div 
               key={tier.id}
               className={`p-3 border rounded-md cursor-pointer transition-colors ${
-                formData.licenseFeePerUser === tier.monthlyPricePerUser 
+                licenseFeePerUser === tier.monthlyPricePerUser 
                   ? 'border-primary bg-primary/10' 
                   : 'hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
@@ -64,104 +74,152 @@ const PricingTab: React.FC<PricingTabProps> = ({
         </div>
       </div>
       
-      <div>
-        <Label htmlFor="licenseFee">{t.licenseFee}</Label>
-        <Input
-          id="licenseFee"
-          type="number"
-          value={formData.licenseFeePerUser}
-          onChange={(e) => handleChange('licenseFeePerUser', parseFloat(e.target.value) || 0)}
-          className="mt-1"
-        />
-        <p className="text-sm text-gray-500 mt-1">{t.licenseFeePricePerUser}</p>
-      </div>
-      
-      <div>
-        <Label htmlFor="subscriptionType">{t.subscriptionType}</Label>
-        <Select
-          value={formData.subscriptionType}
-          onValueChange={(value) => handleChange('subscriptionType', value)}
-        >
-          <SelectTrigger id="subscriptionType" className="mt-1">
-            <SelectValue placeholder={t.selectSubscriptionType} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="mrr-no-commitment">{t.mrrNoCommitment}</SelectItem>
-            <SelectItem value="arr-commitment">{t.arrWithCommitment}</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      
-      <div>
-        <Label htmlFor="contractLength">{t.contractLength}</Label>
-        <Select
-          value={formData.contractLengthYears.toString()}
-          onValueChange={(value) => handleChange('contractLengthYears', parseInt(value))}
-        >
-          <SelectTrigger id="contractLength" className="mt-1">
-            <SelectValue placeholder={t.contractLength} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="1">1 {t.years}</SelectItem>
-            <SelectItem value="2">2 {t.years}</SelectItem>
-            <SelectItem value="3">3 {t.years}</SelectItem>
-            <SelectItem value="4">4 {t.years}</SelectItem>
-            <SelectItem value="5">5 {t.years}</SelectItem>
-          </SelectContent>
-        </Select>
-        {formData.hardwareAcquisitionType === 'lease' && formData.contractLengthYears < 3 && (
-          <p className="text-sm text-amber-600 mt-1">{t.leaseMinimumContractLength}</p>
+      <FormField
+        control={control}
+        name="licenseFeePerUser"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{t.licenseFee}</FormLabel>
+            <FormControl>
+              <Input 
+                type="number" 
+                {...field}
+                onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)} 
+              />
+            </FormControl>
+            <FormDescription>{t.licenseFeePricePerUser}</FormDescription>
+            <FormMessage />
+          </FormItem>
         )}
-      </div>
+      />
+      
+      <FormField
+        control={control}
+        name="subscriptionType"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{t.subscriptionType}</FormLabel>
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder={t.selectSubscriptionType} />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value="mrr-no-commitment">{t.mrrNoCommitment}</SelectItem>
+                <SelectItem value="arr-commitment">{t.arrWithCommitment}</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      
+      <FormField
+        control={control}
+        name="contractLengthYears"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{t.contractLength}</FormLabel>
+            <Select
+              onValueChange={(value) => field.onChange(parseInt(value))}
+              defaultValue={field.value.toString()}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder={t.contractLength} />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value="1">1 {t.years}</SelectItem>
+                <SelectItem value="2">2 {t.years}</SelectItem>
+                <SelectItem value="3">3 {t.years}</SelectItem>
+                <SelectItem value="4">4 {t.years}</SelectItem>
+                <SelectItem value="5">5 {t.years}</SelectItem>
+              </SelectContent>
+            </Select>
+            {hardwareAcquisitionType === 'lease' && contractLengthYears < 3 && (
+              <FormMessage className="text-amber-600">{t.leaseMinimumContractLength}</FormMessage>
+            )}
+          </FormItem>
+        )}
+      />
       
       <div>
         <h4 className="font-medium mb-3">{t.discountParameters}</h4>
         
         <div className="space-y-4">
-          <div>
-            <div className="flex justify-between mb-2">
-              <Label htmlFor="volumeDiscount">{t.volumeDiscount}</Label>
-              <span>{formData.volumeDiscountRate}%</span>
-            </div>
-            <Slider
-              id="volumeDiscount"
-              value={[formData.volumeDiscountRate]}
-              min={0}
-              max={50}
-              step={1}
-              onValueChange={(values) => handleChange('volumeDiscountRate', values[0])}
-            />
-          </div>
+          <FormField
+            control={control}
+            name="volumeDiscountRate"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex justify-between mb-2">
+                  <FormLabel>{t.volumeDiscount}</FormLabel>
+                  <span>{field.value}%</span>
+                </div>
+                <FormControl>
+                  <Slider
+                    value={[field.value]}
+                    min={0}
+                    max={50}
+                    step={1}
+                    onValueChange={(values) => field.onChange(values[0])}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           
-          <div>
-            <div className="flex justify-between mb-2">
-              <Label htmlFor="contractDiscount">{t.contractLengthDiscount}</Label>
-              <span>{formData.contractLengthDiscountRate}%</span>
-            </div>
-            <Slider
-              id="contractDiscount"
-              value={[formData.contractLengthDiscountRate]}
-              min={0}
-              max={50}
-              step={1}
-              onValueChange={(values) => handleChange('contractLengthDiscountRate', values[0])}
-            />
-          </div>
+          <FormField
+            control={control}
+            name="contractLengthDiscountRate"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex justify-between mb-2">
+                  <FormLabel>{t.contractLengthDiscount}</FormLabel>
+                  <span>{field.value}%</span>
+                </div>
+                <FormControl>
+                  <Slider
+                    value={[field.value]}
+                    min={0}
+                    max={50}
+                    step={1}
+                    onValueChange={(values) => field.onChange(values[0])}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           
-          <div>
-            <div className="flex justify-between mb-2">
-              <Label htmlFor="customDiscount">{t.customDiscount}</Label>
-              <span>{formData.customDiscountRate}%</span>
-            </div>
-            <Slider
-              id="customDiscount"
-              value={[formData.customDiscountRate]}
-              min={0}
-              max={50}
-              step={1}
-              onValueChange={(values) => handleChange('customDiscountRate', values[0])}
-            />
-          </div>
+          <FormField
+            control={control}
+            name="customDiscountRate"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex justify-between mb-2">
+                  <FormLabel>{t.customDiscount}</FormLabel>
+                  <span>{field.value}%</span>
+                </div>
+                <FormControl>
+                  <Slider
+                    value={[field.value]}
+                    min={0}
+                    max={50}
+                    step={1}
+                    onValueChange={(values) => field.onChange(values[0])}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
       </div>
     </div>

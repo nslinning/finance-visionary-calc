@@ -1,9 +1,16 @@
 
 import React from 'react';
 import { TranslationObject } from '../../../constants/calculator/types';
-import { CustomerSegment } from '../../../types/calculator';
+import { useFormContext } from 'react-hook-form';
+import { 
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -15,93 +22,130 @@ import { Separator } from '@/components/ui/separator';
 
 interface BasicInfoTabProps {
   t: TranslationObject;
-  formData: CustomerSegment;
-  handleChange: (field: string, value: any) => void;
 }
 
-const BasicInfoTab: React.FC<BasicInfoTabProps> = ({ t, formData, handleChange }) => {
+const BasicInfoTab: React.FC<BasicInfoTabProps> = ({ t }) => {
+  const { control, watch } = useFormContext();
+  const isIndividualCustomer = watch('isIndividualCustomer');
+
   return (
     <div className="space-y-6">
-      <div>
-        <Label htmlFor="segmentName">{t.segmentName}</Label>
-        <Input
-          id="segmentName"
-          value={formData.name}
-          onChange={(e) => handleChange('name', e.target.value)}
-          className="mt-1"
-        />
-      </div>
+      <FormField
+        control={control}
+        name="name"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{t.segmentName}</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       
-      <div>
-        <Label htmlFor="segmentType">{t.segmentType}</Label>
-        <Select
-          value={formData.type}
-          onValueChange={(value) => handleChange('type', value)}
-        >
-          <SelectTrigger id="segmentType" className="mt-1">
-            <SelectValue placeholder={t.segmentType} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="b2b">{t.b2b}</SelectItem>
-            <SelectItem value="b2c">{t.b2c}</SelectItem>
-            <SelectItem value="b2b2c">{t.b2b2c}</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <FormField
+        control={control}
+        name="type"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{t.segmentType}</FormLabel>
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder={t.segmentType} />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value="b2b">{t.b2b}</SelectItem>
+                <SelectItem value="b2c">{t.b2c}</SelectItem>
+                <SelectItem value="b2b2c">{t.b2b2c}</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       
-      <div>
-        <Label htmlFor="employeeCount">{t.employeeCount}</Label>
-        <Input
-          id="employeeCount"
-          type="number"
-          value={formData.employeeCount}
-          onChange={(e) => handleChange('employeeCount', parseInt(e.target.value) || 1)}
-          min={1}
-          className="mt-1"
-        />
-      </div>
+      <FormField
+        control={control}
+        name="employeeCount"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{t.employeeCount}</FormLabel>
+            <FormControl>
+              <Input 
+                type="number"
+                min={1}
+                {...field}
+                onChange={(e) => field.onChange(parseInt(e.target.value) || 1)} 
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       
-      <div>
-        <Label htmlFor="calculationPurpose">{t.calculationPurpose}</Label>
-        <Select
-          value={formData.calculationPurpose}
-          onValueChange={(value) => handleChange('calculationPurpose', value)}
-        >
-          <SelectTrigger id="calculationPurpose" className="mt-1">
-            <SelectValue placeholder={t.selectPurpose} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="offer">{t.createOffer}</SelectItem>
-            <SelectItem value="valuation">{t.calculateValue}</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <FormField
+        control={control}
+        name="calculationPurpose"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{t.calculationPurpose}</FormLabel>
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder={t.selectPurpose} />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value="offer">{t.createOffer}</SelectItem>
+                <SelectItem value="valuation">{t.calculateValue}</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       
-      {formData.isIndividualCustomer && (
+      {isIndividualCustomer && (
         <>
           <Separator />
           <h4 className="text-lg font-medium">{t.customerDetails}</h4>
           
-          <div>
-            <Label htmlFor="customerName">{t.customerName}</Label>
-            <Input
-              id="customerName"
-              value={formData.customerName || ''}
-              onChange={(e) => handleChange('customerName', e.target.value)}
-              className="mt-1"
-            />
-          </div>
+          <FormField
+            control={control}
+            name="customerName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t.customerName}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           
-          <div>
-            <Label htmlFor="customerEmail">{t.customerEmail}</Label>
-            <Input
-              id="customerEmail"
-              type="email"
-              value={formData.customerEmail || ''}
-              onChange={(e) => handleChange('customerEmail', e.target.value)}
-              className="mt-1"
-            />
-          </div>
+          <FormField
+            control={control}
+            name="customerEmail"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t.customerEmail}</FormLabel>
+                <FormControl>
+                  <Input type="email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </>
       )}
     </div>
