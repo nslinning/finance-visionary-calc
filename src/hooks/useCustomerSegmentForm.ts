@@ -26,13 +26,15 @@ export const useCustomerSegmentForm = (
       const formErrors: Record<string, any> = {};
       
       // Handle error properly based on the return type
-      // We already know result.success is false here, so result.error must exist
-      for (const issue of result.error.errors) {
-        const path = issue.path.join('.');
-        formErrors[path] = {
-          type: issue.code,
-          message: issue.message
-        };
+      // We've already checked that result.success is false, so we can safely access result.error
+      if ('error' in result) {
+        for (const issue of result.error.errors) {
+          const path = issue.path.join('.');
+          formErrors[path] = {
+            type: issue.code,
+            message: issue.message
+          };
+        }
       }
       
       return {
