@@ -4,7 +4,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   BarChart, Bar, ReferenceLine, ComposedChart, Cell, AreaChart, Area
 } from 'recharts';
-import { Activity, Briefcase, CreditCard, TrendingUp } from 'lucide-react';
+import { Activity, Briefcase, CreditCard, TrendingUp, PlusCircle } from 'lucide-react';
 import { COLORS } from '../../constants/calculator/categories';
 import { formatCurrency } from '../../utils/calculator';
 import { TranslationObject } from '../../constants/calculator/types';
@@ -31,7 +31,39 @@ const DashboardTab: React.FC<DashboardTabProps> = ({
   language,
   getCategoryName
 }) => {
-  if (!summaryMetrics) return <div className="p-4">Loading data...</div>;
+  if (!summaryMetrics) {
+    return (
+      <div className="p-8 text-center bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <div className="max-w-xl mx-auto">
+          <PlusCircle className="w-16 h-16 mx-auto text-blue-500 mb-6" />
+          <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+            {t.welcomeToDashboard}
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            {t.dashboardInstructions}
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+              <h3 className="font-semibold text-blue-700 dark:text-blue-300 mb-2">
+                {t.firstStepTitle}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {t.firstStepDescription}
+              </p>
+            </div>
+            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+              <h3 className="font-semibold text-green-700 dark:text-green-300 mb-2">
+                {t.secondStepTitle}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {t.secondStepDescription}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="p-4">

@@ -1,5 +1,4 @@
-
-import { ProductCategories, RevenueTypes, FixedCostCategories, FixedCostTypes, TranslationObject } from '../types';
+import { TranslationObject } from '../types';
 
 const productCategories: ProductCategories = {
   dtc: 'Direct-to-Consumer (DTC)',
@@ -151,5 +150,11 @@ export const englishTranslations: TranslationObject = {
   period: 'Period',
   amount: 'Amount',
   totalFixedCosts: 'Total Fixed Costs',
-  totalFixedCostsSummary: 'Total fixed costs across all categories for the latest period.'
+  totalFixedCostsSummary: 'Total fixed costs across all categories for the latest period.',
+  welcomeToDashboard: "Welcome to Your Strategic Financial Planner",
+  dashboardInstructions: "To get started, you need to add information in different categories. Begin with timeline planning, then add products, income streams, and fixed costs.",
+  firstStepTitle: "Start with Timeline Planning",
+  firstStepDescription: "Set the periods you want to analyze, such as months or quarters.",
+  secondStepTitle: "Add Products",
+  secondStepDescription: "Create products with details like price, acquisition cost, and expected sales volume."
 };
