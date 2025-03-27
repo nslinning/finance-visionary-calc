@@ -227,5 +227,11 @@ export const norwegianTranslations: TranslationObject = {
   logisticsCostDescription: 'Prosentandel av omsetning som går til logistikk',
   indirectCostDescription: 'Prosentandel av omsetning som går til indirekte bedriftskostnader',
   additionalCostDescription: 'Faste månedlige tilleggskostnader',
-  costBreakdown: 'inkl. tilleggskostnader'
+  costBreakdown: 'inkl. tilleggskostnader',
+  
+  // Fixed costs section
+  addFixedCost: 'Legg til fast kostnad',
+  costName: 'Kostnadsnavn',
+  costCategory: 'Kostnadskategori',
+  save: 'Lagre'
 };

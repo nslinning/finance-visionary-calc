@@ -227,5 +227,11 @@ export const englishTranslations: TranslationObject = {
   logisticsCostDescription: 'Percentage of revenue that goes to logistics',
   indirectCostDescription: 'Percentage of revenue that goes to indirect company costs',
   additionalCostDescription: 'Fixed monthly additional costs',
-  costBreakdown: 'incl. additional costs'
+  costBreakdown: 'incl. additional costs',
+  
+  // Fixed costs section
+  addFixedCost: 'Add Fixed Cost',
+  costName: 'Cost Name',
+  costCategory: 'Cost Category',
+  save: 'Save'
 };

@@ -257,4 +257,10 @@ export interface TranslationObject {
   indirectCostDescription: string;
   additionalCostDescription: string;
   costBreakdown: string;
+  
+  // Fixed costs section
+  addFixedCost: string;
+  costName: string;
+  costCategory: string;
+  save: string;
 }
