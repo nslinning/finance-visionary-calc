@@ -45,7 +45,7 @@ export const customerSegmentSchema = z.object({
 export type CustomerSegmentFormData = z.infer<typeof customerSegmentSchema>;
 
 // Define return type for validation function to ensure type safety
-type ValidationResult = 
+export type ValidationResult = 
   | { success: true; data: CustomerSegmentFormData }
   | { success: false; error: ZodError<any> };
 
