@@ -58,13 +58,14 @@ export const useCalculatorProducts = (language: string) => {
     const product = products.find(p => p.id === productId);
     if (product) {
       setEditingProduct(product);
-      return product;
+      // Fixed: Return null here since we no longer need to return the product
+      return null;
     }
     return null;
   };
   
   const updateProduct = () => {
-    if (!editingProduct) return;
+    if (!editingProduct) return null;
     
     const cost = editingProduct.type === 'product' 
       ? ((editingProduct as any).productionCost + (editingProduct as any).logisticsCost + editingProduct.marketingCost)
@@ -80,10 +81,12 @@ export const useCalculatorProducts = (language: string) => {
       marginPercentage
     };
     
+    // Update the products array with the updated product
     setProducts(products.map(p => 
       p.id === updatedProduct.id ? updatedProduct : p
     ));
     
+    // Clear the editing product
     setEditingProduct(null);
     
     return updatedProduct;

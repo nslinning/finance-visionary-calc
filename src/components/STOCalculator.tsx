@@ -89,6 +89,13 @@ const STOCalculator = () => {
     }, 2000);
   };
   
+  // Enhanced function to properly handle product editing
+  const handleEditProduct = (productId: number) => {
+    editProduct(productId);
+    setShowModal(true);
+    setModalType('editProduct');
+  };
+  
   const renderModal = () => {
     if (modalType === 'editProduct') {
       return (
@@ -167,7 +174,7 @@ const STOCalculator = () => {
               getCategoryName={translateCategoryName}
               getRevenueTypeName={(id) => t.revenueTypes[id as keyof typeof t.revenueTypes] || id}
               getProductCategories={getProductCategories}
-              editProduct={editProduct}
+              editProduct={handleEditProduct}
               deleteProduct={deleteProduct}
               toggleMetricExpansion={toggleMetricExpansion}
               setFilteredCategory={setFilteredCategory}

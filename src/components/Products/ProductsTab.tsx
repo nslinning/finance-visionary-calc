@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Edit2, PlusCircle, Trash2 } from 'lucide-react';
 import { formatCurrency } from '../../utils/calculatorUtils';
