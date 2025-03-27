@@ -126,18 +126,34 @@ const CustomerSegmentsTab: React.FC<CustomerSegmentsTabProps> = ({
       }
     }
     
-    const annualFee = discountedMonthlyFee * 12;
-    const totalContractValue = annualFee * segment.contractLengthYears;
+    // Calculate additional costs
+    const logisticsCost = (segment.logisticsCostPercentage || 0) / 100 * discountedMonthlyFee;
+    const indirectCost = (segment.indirectCostPercentage || 0) / 100 * discountedMonthlyFee;
+    const additionalCost = segment.additionalCosts || 0;
+    
+    const totalAdditionalCosts = logisticsCost + indirectCost + additionalCost;
+    const totalMonthlyFee = discountedMonthlyFee + totalAdditionalCosts;
+    
+    const annualFee = totalMonthlyFee * 12;
+    const totalContractValue = annualFee * segment.contractLengthYears + 
+      (segment.hardwareAcquisitionType === 'purchase' ? hardwareCost : 0);
     
     // Calculate monthly per user fee
     const monthlyPerUserFee = discountedMonthlyFee / segment.employeeCount;
     
     return {
       monthly: discountedMonthlyFee,
+      monthlyWithCosts: totalMonthlyFee,
       annual: annualFee,
-      total: totalContractValue + (segment.hardwareAcquisitionType === 'purchase' ? hardwareCost : 0),
+      total: totalContractValue,
       monthlyPerUser: monthlyPerUserFee,
-      hardwareCost
+      hardwareCost,
+      additionalCosts: {
+        logistics: logisticsCost,
+        indirect: indirectCost,
+        fixed: additionalCost,
+        total: totalAdditionalCosts
+      }
     };
   };
   
@@ -285,6 +301,15 @@ const CustomerSegmentsTab: React.FC<CustomerSegmentsTabProps> = ({
                     </span>
                   </div>
                   
+                  {(segment.logisticsCostPercentage || segment.indirectCostPercentage || segment.additionalCosts) && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600 dark:text-gray-400">{t.monthlyFee} ({t.costBreakdown}):</span>
+                      <span className="font-medium">
+                        {formatCurrency(revenue.monthlyWithCosts, currency, language)}
+                      </span>
+                    </div>
+                  )}
+                  
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">{t.annualRecurringRevenue}:</span>
                     <span className="font-medium">
@@ -310,6 +335,47 @@ const CustomerSegmentsTab: React.FC<CustomerSegmentsTabProps> = ({
                       {segment.subscriptionType === 'mrr-no-commitment' ? t.mrrNoCommitment : t.arrWithCommitment}
                     </span>
                   </div>
+                  
+                  {(segment.logisticsCostPercentage || segment.indirectCostPercentage || segment.additionalCosts) && (
+                    <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <h4 className="font-medium mb-2">{t.additionalCostsTab}</h4>
+                      <div className="space-y-2">
+                        {segment.logisticsCostPercentage > 0 && (
+                          <div className="flex justify-between">
+                            <span className="text-gray-600 dark:text-gray-400">{t.logisticsCosts} ({segment.logisticsCostPercentage}%):</span>
+                            <span className="font-medium">
+                              {formatCurrency(revenue.additionalCosts.logistics, currency, language)}
+                            </span>
+                          </div>
+                        )}
+                        
+                        {segment.indirectCostPercentage > 0 && (
+                          <div className="flex justify-between">
+                            <span className="text-gray-600 dark:text-gray-400">{t.indirectCosts} ({segment.indirectCostPercentage}%):</span>
+                            <span className="font-medium">
+                              {formatCurrency(revenue.additionalCosts.indirect, currency, language)}
+                            </span>
+                          </div>
+                        )}
+                        
+                        {segment.additionalCosts > 0 && (
+                          <div className="flex justify-between">
+                            <span className="text-gray-600 dark:text-gray-400">{t.additionalFixedCosts}:</span>
+                            <span className="font-medium">
+                              {formatCurrency(revenue.additionalCosts.fixed, currency, language)}
+                            </span>
+                          </div>
+                        )}
+                        
+                        <div className="flex justify-between pt-1 border-t border-gray-100 dark:border-gray-700">
+                          <span className="text-gray-600 dark:text-gray-400 font-medium">{t.total}:</span>
+                          <span className="font-medium">
+                            {formatCurrency(revenue.additionalCosts.total, currency, language)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   
                   {segment.includesHardware && hardwareProduct && (
                     <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">

@@ -1,83 +1,66 @@
 
 import React, { useState } from 'react';
 import { TranslationObject } from '../../constants/calculator/types';
-import { Calendar } from '@/components/ui/calendar';
+import { Period, FinancialData } from '../../types/calculator';
+import { addMonths, format, parse, startOfMonth } from 'date-fns';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Period } from '../../types/calculator';
-import { format } from 'date-fns';
-import { nb } from 'date-fns/locale';
+import { Separator } from '@/components/ui/separator';
 
 interface TimelinePlanningTabProps {
   t: TranslationObject;
-  setPeriods: (periods: Period[]) => void;
+  setPeriods: React.Dispatch<React.SetStateAction<Period[]>>;
 }
 
 const TimelinePlanningTab: React.FC<TimelinePlanningTabProps> = ({ t, setPeriods }) => {
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [duration, setDuration] = useState<string>("1");
-  const [interval, setInterval] = useState<string>("year");
-  const [initialBalance, setInitialBalance] = useState<string>("0");
-  const [initialReceivables, setInitialReceivables] = useState<string>("0");
-  const [initialPayables, setInitialPayables] = useState<string>("0");
+  const [startDate, setStartDate] = useState<Date | undefined>(startOfMonth(new Date()));
+  const [duration, setDuration] = useState(12);
+  const [interval, setInterval] = useState('month');
+  const [initialBalance, setInitialBalance] = useState(0);
+  const [initialReceivables, setInitialReceivables] = useState(0);
+  const [initialPayables, setInitialPayables] = useState(0);
+  const [calendarOpen, setCalendarOpen] = useState(false);
   
   const generatePeriods = () => {
     if (!startDate) return;
     
-    const durationYears = parseInt(duration);
     const periods: Period[] = [];
     let currentDate = new Date(startDate);
     
-    // Add initial financial data to the first period metadata
-    const initialFinancialData = {
-      initialBalance: parseFloat(initialBalance) || 0,
-      initialReceivables: parseFloat(initialReceivables) || 0,
-      initialPayables: parseFloat(initialPayables) || 0
-    };
+    const intervalMonths = interval === 'month' ? 1 : interval === 'quarter' ? 3 : 12;
+    const periods_count = interval === 'month' ? duration : interval === 'quarter' ? duration * 4 : duration * 12;
     
-    if (interval === "year") {
-      for (let i = 0; i < durationYears; i++) {
-        const year = currentDate.getFullYear();
-        periods.push({
-          id: i + 1,
-          label: year.toString(),
-          date: new Date(currentDate),
-          ...(i === 0 ? { financialData: initialFinancialData } : {})
-        });
-        currentDate.setFullYear(currentDate.getFullYear() + 1);
+    for (let i = 0; i < periods_count; i++) {
+      const periodDate = addMonths(currentDate, i * intervalMonths);
+      
+      // Create financial data for the first period
+      const financialData: FinancialData | undefined = i === 0 ? {
+        initialBalance,
+        initialReceivables,
+        initialPayables
+      } : undefined;
+      
+      let label = '';
+      if (interval === 'month') {
+        label = format(periodDate, 'MMM yyyy');
+      } else if (interval === 'quarter') {
+        const quarter = Math.floor(periodDate.getMonth() / 3) + 1;
+        label = `Q${quarter} ${format(periodDate, 'yyyy')}`;
+      } else {
+        label = format(periodDate, 'yyyy');
       }
-    } else if (interval === "quarter") {
-      for (let i = 0; i < durationYears * 4; i++) {
-        const year = currentDate.getFullYear();
-        const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
-        periods.push({
-          id: i + 1,
-          label: `Q${quarter} ${year}`,
-          date: new Date(currentDate),
-          ...(i === 0 ? { financialData: initialFinancialData } : {})
-        });
-        currentDate.setMonth(currentDate.getMonth() + 3);
-      }
-    } else if (interval === "month") {
-      for (let i = 0; i < durationYears * 12; i++) {
-        const year = currentDate.getFullYear();
-        const month = currentDate.toLocaleString('nb-NO', { month: 'short' });
-        periods.push({
-          id: i + 1,
-          label: `${month} ${year}`,
-          date: new Date(currentDate),
-          ...(i === 0 ? { financialData: initialFinancialData } : {})
-        });
-        currentDate.setMonth(currentDate.getMonth() + 1);
-      }
+      
+      periods.push({
+        id: i + 1,
+        date: periodDate,
+        label,
+        financialData
+      });
     }
     
     setPeriods(periods);
@@ -87,108 +70,124 @@ const TimelinePlanningTab: React.FC<TimelinePlanningTabProps> = ({ t, setPeriods
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-6">{t.timelinePlanning}</h2>
       
-      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <h3 className="text-lg font-medium mb-4">{t.timelineStartDate}</h3>
-            <div className="border rounded-md p-4">
-              <Calendar
-                mode="single"
-                selected={startDate}
-                onSelect={setStartDate}
-                locale={nb}
-                className="p-3 pointer-events-auto"
-              />
-            </div>
-          </div>
-          
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-medium mb-4">{t.timelineDuration}</h3>
-              <Select
-                value={duration}
-                onValueChange={setDuration}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder={t.timelineDuration} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1 {t.years}</SelectItem>
-                  <SelectItem value="2">2 {t.years}</SelectItem>
-                  <SelectItem value="3">3 {t.years}</SelectItem>
-                  <SelectItem value="4">4 {t.years}</SelectItem>
-                  <SelectItem value="5">5 {t.years}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-medium mb-4">{t.timelineInterval}</h3>
-              <Select
-                value={interval}
-                onValueChange={setInterval}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder={t.timelineInterval} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="year">{t.year}</SelectItem>
-                  <SelectItem value="quarter">{t.quarter}</SelectItem>
-                  <SelectItem value="month">{t.month}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            {/* Initial Financial Data Section */}
-            <div className="border p-4 rounded-md space-y-3">
-              <h3 className="text-lg font-medium">{t.initialFinancialData || "Initial Financial Data"}</h3>
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>{t.timelineStartDate}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4">
+              <div>
+                <Label htmlFor="startDate">{t.setStartDate}</Label>
+                <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left font-normal mt-1"
+                    >
+                      {startDate ? format(startDate, 'PPP') : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={startDate}
+                      onSelect={(date) => {
+                        setStartDate(date);
+                        setCalendarOpen(false);
+                      }}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
               
-              <div className="space-y-2">
+              <div>
+                <Label htmlFor="duration">{t.timelineDuration}</Label>
+                <div className="flex items-center gap-2 mt-1">
+                  <Input
+                    id="duration"
+                    type="number"
+                    value={duration}
+                    onChange={(e) => setDuration(parseInt(e.target.value) || 1)}
+                    min={1}
+                    max={120}
+                  />
+                  <span>{t[interval as keyof TranslationObject] as string}</span>
+                </div>
+              </div>
+              
+              <div>
+                <Label htmlFor="interval">{t.timelineInterval}</Label>
+                <Select value={interval} onValueChange={setInterval}>
+                  <SelectTrigger id="interval" className="mt-1">
+                    <SelectValue placeholder={t.timelineInterval} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="month">{t.month}</SelectItem>
+                    <SelectItem value="quarter">{t.quarter}</SelectItem>
+                    <SelectItem value="year">{t.year}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle>{t.initialFinancialData || "Initial Financial Data"}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4">
+              <div>
                 <Label htmlFor="initialBalance">{t.initialBalance || "Initial Balance"}</Label>
                 <Input
                   id="initialBalance"
                   type="number"
                   value={initialBalance}
-                  onChange={(e) => setInitialBalance(e.target.value)}
-                  placeholder="0"
+                  onChange={(e) => setInitialBalance(parseFloat(e.target.value) || 0)}
+                  className="mt-1"
                 />
               </div>
               
-              <div className="space-y-2">
+              <div>
                 <Label htmlFor="initialReceivables">{t.initialReceivables || "Initial Receivables"}</Label>
                 <Input
                   id="initialReceivables"
                   type="number"
                   value={initialReceivables}
-                  onChange={(e) => setInitialReceivables(e.target.value)}
-                  placeholder="0"
+                  onChange={(e) => setInitialReceivables(parseFloat(e.target.value) || 0)}
+                  className="mt-1"
                 />
               </div>
               
-              <div className="space-y-2">
+              <div>
                 <Label htmlFor="initialPayables">{t.initialPayables || "Initial Payables"}</Label>
                 <Input
                   id="initialPayables"
                   type="number"
                   value={initialPayables}
-                  onChange={(e) => setInitialPayables(e.target.value)}
-                  placeholder="0"
+                  onChange={(e) => setInitialPayables(parseFloat(e.target.value) || 0)}
+                  className="mt-1"
                 />
               </div>
             </div>
-            
-            <div className="pt-4">
-              <Button 
-                onClick={generatePeriods}
-                disabled={!startDate}
-                className="w-full"
-              >
-                {t.applyTimeline}
-              </Button>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
+      
+      <div className="mt-6">
+        <Button onClick={generatePeriods} className="w-full md:w-auto">
+          {t.applyTimeline}
+        </Button>
+      </div>
+      
+      <Separator className="my-6" />
+      
+      <p className="text-sm text-gray-500 dark:text-gray-400">
+        {t.timelinePlanning} {t.dashboardInstructions}
+      </p>
     </div>
   );
 };

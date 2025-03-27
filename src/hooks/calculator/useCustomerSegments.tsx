@@ -96,7 +96,7 @@ export const useCustomerSegments = () => {
     const customDiscount = segment.customDiscountRate / 100;
     
     const totalDiscountRate = volumeDiscount + contractDiscount + customDiscount;
-    const discountedMonthlyFee = monthlyLicenseFee * (1 - totalDiscountRate);
+    let discountedMonthlyFee = monthlyLicenseFee * (1 - totalDiscountRate);
     
     // Calculate hardware costs if applicable
     const hardwarePayment = calculateHardwarePayment(segment, products);
@@ -104,17 +104,25 @@ export const useCustomerSegments = () => {
     // Add hardware costs to monthly fee
     const totalMonthlyFee = discountedMonthlyFee + hardwarePayment.monthly;
     
+    // Calculate additional costs
+    const logisticsCost = (segment.logisticsCostPercentage || 0) / 100 * totalMonthlyFee;
+    const indirectCost = (segment.indirectCostPercentage || 0) / 100 * totalMonthlyFee;
+    const additionalCost = segment.additionalCosts || 0;
+    
+    const totalAdditionalCosts = logisticsCost + indirectCost + additionalCost;
+    const totalMonthlyCost = totalMonthlyFee + totalAdditionalCosts;
+    
     // Calculate total based on contract length and commitment type
     let annualFee = 0;
     let totalContractValue = 0;
     
     if (segment.subscriptionType === 'mrr-no-commitment') {
       // MRR - Only calculate based on monthly fees
-      annualFee = totalMonthlyFee * 12;
-      totalContractValue = totalMonthlyFee * 12 * segment.contractLengthYears;
+      annualFee = totalMonthlyCost * 12;
+      totalContractValue = totalMonthlyCost * 12 * segment.contractLengthYears;
     } else {
       // ARR - Annual commitment
-      annualFee = totalMonthlyFee * 12;
+      annualFee = totalMonthlyCost * 12;
       totalContractValue = annualFee * segment.contractLengthYears;
       
       // Add one-time hardware purchase cost if applicable
@@ -133,7 +141,13 @@ export const useCustomerSegments = () => {
       total: totalContractValue,
       monthlyPerUser: monthlyPerUserFee,
       hardwareMonthly: hardwarePayment.monthly,
-      hardwareTotal: hardwarePayment.total
+      hardwareTotal: hardwarePayment.total,
+      additionalCosts: {
+        logistics: logisticsCost,
+        indirect: indirectCost,
+        fixed: additionalCost,
+        total: totalAdditionalCosts
+      }
     };
   };
   

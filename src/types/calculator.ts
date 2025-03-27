@@ -180,6 +180,11 @@ export interface CustomerSegment {
   isIndividualCustomer: boolean;
   customerName?: string;
   customerEmail?: string;
+  
+  // New fields for cost calculations
+  logisticsCostPercentage?: number; // Percentage of revenue for logistics costs
+  indirectCostPercentage?: number; // Percentage of revenue for indirect costs
+  additionalCosts?: number; // Fixed additional costs per month
 }
 
 export interface ExportOptions {

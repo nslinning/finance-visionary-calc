@@ -69,6 +69,7 @@ const STOCalculator = () => {
     updateNewProductState,
     updateEditingProductState,
     setShowModal,
+    setModalType, // Make sure this is imported from useCalculatorUI
     setCurrency,
     translateCategoryName
   } = useCalculatorState(language, theme);

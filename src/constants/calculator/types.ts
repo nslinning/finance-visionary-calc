@@ -153,8 +153,8 @@ export interface TranslationObject {
   quarter: string;
   month: string;
   applyTimeline: string;
-  setStartDate?: string;
-  discountBasedOn?: string;
+  setStartDate: string; 
+  discountBasedOn: string;
   
   // Dashboard welcome screen
   welcomeToDashboard: string;
@@ -238,4 +238,23 @@ export interface TranslationObject {
   
   // Form messages
   email: string;
+  
+  // Initial financial data
+  initialFinancialData: string;
+  initialBalance: string;
+  initialReceivables: string;
+  initialPayables: string;
+  
+  // Additional costs for customer segments
+  additionalCostsTab: string;
+  logisticsCosts: string;
+  logisticsCostPercentage: string;
+  indirectCosts: string;
+  indirectCostPercentage: string;
+  additionalCosts: string;
+  additionalFixedCosts: string;
+  logisticsCostDescription: string;
+  indirectCostDescription: string;
+  additionalCostDescription: string;
+  costBreakdown: string;
 }

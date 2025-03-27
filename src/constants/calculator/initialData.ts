@@ -1,75 +1,116 @@
+import { NewProduct, CustomerSegment } from '../types/calculator';
 
-// Initial data for application state
-export const initialPeriods = [
-  // Empty initially - will be filled by user
-];
-
-export const initialProducts = [
+// Initial products data
+export const initialProducts: NewProduct[] = [
   {
-    id: 1,
-    name: 'STÖ heat patches 3 pcs',
-    price: 100,
-    productionCost: 12,
-    logisticsCost: 5,
-    marketingCost: 3,
-    cost: 20,
-    margin: 80,
-    marginPercentage: 0.8,
+    name: 'Sydera Basic',
+    price: 2990,
+    productionCost: 1200,
+    logisticsCost: 300,
+    operationalCost: 0,
+    marketingCost: 400,
     type: 'product',
     category: 'dtc',
     revenueType: 'product',
-    averageReorderRate: 2.0,
-    averageOrderValue: 100,
+    averageReorderRate: 1.5,
+    averageOrderValue: 3000,
     customerLifetimeMonths: 24,
-    acquisitionCost: 20
+    acquisitionCost: 500
   },
   {
-    id: 2,
-    name: 'STÖ heat patches 6 pcs',
-    price: 150,
-    productionCost: 22,
-    logisticsCost: 5,
-    marketingCost: 3,
-    cost: 30,
-    margin: 120,
-    marginPercentage: 0.8,
+    name: 'Sydera Pro',
+    price: 4990,
+    productionCost: 1800,
+    logisticsCost: 400,
+    operationalCost: 0,
+    marketingCost: 600,
     type: 'product',
     category: 'dtc',
     revenueType: 'product',
-    averageReorderRate: 2.0,
-    averageOrderValue: 150,
-    customerLifetimeMonths: 24,
-    acquisitionCost: 20
+    averageReorderRate: 2,
+    averageOrderValue: 5000,
+    customerLifetimeMonths: 36,
+    acquisitionCost: 750
   },
   {
-    id: 3,
-    name: 'SYDERA SMART VENDING',
-    price: 200000,
-    productionCost: 100000,
-    logisticsCost: 5000,
-    marketingCost: 3000,
-    cost: 108000,
-    margin: 92000,
-    marginPercentage: 0.46,
+    name: 'Sydera Enterprise',
+    price: 7990,
+    productionCost: 2500,
+    logisticsCost: 500,
+    operationalCost: 0,
+    marketingCost: 800,
+    type: 'product',
+    category: 'dtc',
+    revenueType: 'product',
+    averageReorderRate: 2.5,
+    averageOrderValue: 8000,
+    customerLifetimeMonths: 48,
+    acquisitionCost: 1000
+  },
+  {
+    name: 'Sydera Support',
+    price: 990,
+    productionCost: 0,
+    logisticsCost: 0,
+    operationalCost: 200,
+    marketingCost: 100,
+    type: 'service',
+    category: 'dtc',
+    revenueType: 'service',
+    averageReorderRate: 0,
+    averageOrderValue: 0,
+    customerLifetimeMonths: 0,
+    acquisitionCost: 0
+  },
+  {
+    name: 'Sydera Training',
+    price: 1490,
+    productionCost: 0,
+    logisticsCost: 0,
+    operationalCost: 300,
+    marketingCost: 150,
+    type: 'service',
+    category: 'dtc',
+    revenueType: 'service',
+    averageReorderRate: 0,
+    averageOrderValue: 0,
+    customerLifetimeMonths: 0,
+    acquisitionCost: 0
+  },
+  {
+    name: 'Sydera Consulting',
+    price: 1990,
+    productionCost: 0,
+    logisticsCost: 0,
+    operationalCost: 400,
+    marketingCost: 200,
+    type: 'service',
+    category: 'dtc',
+    revenueType: 'service',
+    averageReorderRate: 0,
+    averageOrderValue: 0,
+    customerLifetimeMonths: 0,
+    acquisitionCost: 0
+  },
+  {
+    name: 'Sydera Smart Vending',
+    price: 12990,
+    productionCost: 5000,
+    logisticsCost: 1000,
+    operationalCost: 0,
+    marketingCost: 1500,
     type: 'product',
     category: 'dtb',
     revenueType: 'product',
-    averageReorderRate: 0.25,
-    averageOrderValue: 200000,
+    averageReorderRate: 3,
+    averageOrderValue: 15000,
     customerLifetimeMonths: 60,
-    acquisitionCost: 5000
+    acquisitionCost: 2000
   }
 ];
 
-export const initialIncomeStreams = [
-  // Empty initially
-];
-
-export const initialFixedCosts = [
-  // Empty initially
-];
-
-export const defaultNewProduct = {
+// Default new product data
+export const defaultNewProduct: NewProduct = {
   name: '',
   price: 0,
   productionCost: 0,
@@ -79,75 +120,68 @@ export const defaultNewProduct = {
   type: 'product',
   category: 'dtc',
   revenueType: 'product',
-  averageReorderRate: 2,
+  averageReorderRate: 1,
   averageOrderValue: 0,
   customerLifetimeMonths: 12,
-  acquisitionCost: 0,
+  acquisitionCost: 0
 };
 
-// Default customer segment
-export const defaultNewSegment = {
+// Default new segment data
+export const defaultNewSegment: CustomerSegment = {
+  id: 0,
   name: '',
   type: 'b2b',
   products: [],
-  licenseFeePerUser: 0,
+  licenseFeePerUser: 299,
   contractLengthYears: 1,
   volumeDiscountRate: 0,
   contractLengthDiscountRate: 0,
   customDiscountRate: 0,
-  employeeCount: 1,
-  
-  // New fields for hardware options
+  employeeCount: 10,
   includesHardware: false,
-  hardwareAcquisitionType: 'purchase' as const,
-  leaseInterestRate: 5.0, // Default 5% interest rate
-  
-  // Subscription type
-  subscriptionType: 'arr-commitment' as const,
-  
-  // Is this an individual customer
+  hardwareAcquisitionType: 'purchase',
+  leaseInterestRate: 5.0,
+  subscriptionType: 'arr-commitment',
+  calculationPurpose: 'offer',
   isIndividualCustomer: false,
-  
-  // Default calculation purpose
-  calculationPurpose: 'offer' as const
+  logisticsCostPercentage: 0,
+  indirectCostPercentage: 0,
+  additionalCosts: 0
 };
 
+// Product subscription tiers
 export const subscriptionTiers = [
   {
-    id: 'essential',
-    name: 'Essential',
-    monthlyPricePerUser: 500,
+    id: 'basic',
+    name: 'Basic',
+    monthlyPricePerUser: 199,
     features: [
-      'Basic workplace wellness assessment',
-      'Standard product access via ASD lockers',
-      'Privacy-focused anonymous access',
-      'Basic compliance documentation'
+      'Core functionality',
+      'Basic reporting',
+      'Email support'
     ]
   },
   {
-    id: 'professional',
-    name: 'Professional',
-    monthlyPricePerUser: 800,
+    id: 'pro',
+    name: 'Pro',
+    monthlyPricePerUser: 299,
     features: [
-      'Advanced wellness analytics',
-      'Home delivery options',
-      'ISO 45010 compliance tools',
-      'ESG reporting dashboard',
-      'Blockchain-secured privacy'
+      'Advanced reporting',
+      'Priority support',
+      'API access',
+      'Custom integrations'
     ]
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
-    monthlyPricePerUser: 1500, // Custom pricing, but we set a default
+    monthlyPricePerUser: 499,
     features: [
-      'Full wellness ecosystem',
-      'Integration with corporate systems',
-      'ROI & Impact calculator module',
-      'Advanced ESG/CSRD reporting',
-      'Dedicated success manager',
-      'Custom AI-powered analytics'
+      'Dedicated support',
+      'Custom development',
+      'SLA guarantee',
+      'Advanced security',
+      'User management'
     ]
   }
 ];
-
