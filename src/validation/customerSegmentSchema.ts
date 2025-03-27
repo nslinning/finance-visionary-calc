@@ -43,51 +43,61 @@ export const customerSegmentSchema = z.object({
 // Type for the form data
 export type CustomerSegmentFormData = z.infer<typeof customerSegmentSchema>;
 
-// Conditional validation function
+// Conditional validation function - returns a SafeParseReturn instead of a new schema
 export const validateCustomerSegmentForm = (data: any) => {
-  // Create a refined schema based on conditions
-  let refinedSchema = customerSegmentSchema;
-  
-  // Add conditional validation for hardware
+  // Check hardware requirements if hardware is included
   if (data.includesHardware) {
-    refinedSchema = refinedSchema.refine(
-      (values) => !values.includesHardware || values.hardwareAcquisitionType !== undefined,
-      {
-        message: "Hardware acquisition type is required when hardware is included",
-        path: ["hardwareAcquisitionType"]
-      }
-    ).refine(
-      (values) => !values.includesHardware || values.hardwareId !== undefined,
-      {
-        message: "Hardware product is required when hardware is included",
-        path: ["hardwareId"]
-      }
-    );
+    // Hardware acquisition type is required
+    if (!data.hardwareAcquisitionType) {
+      return {
+        success: false,
+        error: new z.ZodError([{
+          code: z.ZodIssueCode.custom,
+          path: ["hardwareAcquisitionType"],
+          message: "Hardware acquisition type is required when hardware is included"
+        }])
+      };
+    }
     
-    // Additional validation for lease
-    if (data.hardwareAcquisitionType === "lease") {
-      refinedSchema = refinedSchema.refine(
-        (values) => values.hardwareAcquisitionType !== "lease" || 
-                   (values.leaseInterestRate !== undefined && values.leaseInterestRate > 0),
-        {
-          message: "Lease interest rate is required for leasing hardware",
-          path: ["leaseInterestRate"]
-        }
-      );
+    // Hardware ID is required
+    if (data.hardwareId === undefined) {
+      return {
+        success: false,
+        error: new z.ZodError([{
+          code: z.ZodIssueCode.custom,
+          path: ["hardwareId"],
+          message: "Hardware product is required when hardware is included"
+        }])
+      };
+    }
+    
+    // Lease interest rate is required for leasing
+    if (data.hardwareAcquisitionType === "lease" && 
+        (data.leaseInterestRate === undefined || data.leaseInterestRate <= 0)) {
+      return {
+        success: false,
+        error: new z.ZodError([{
+          code: z.ZodIssueCode.custom,
+          path: ["leaseInterestRate"],
+          message: "Lease interest rate is required for leasing hardware"
+        }])
+      };
     }
   }
   
   // Individual customer validation
-  if (data.isIndividualCustomer) {
-    refinedSchema = refinedSchema.refine(
-      (values) => !values.isIndividualCustomer || 
-                 (values.customerName !== undefined && values.customerName.length > 0),
-      {
-        message: "Customer name is required for individual customers",
-        path: ["customerName"]
-      }
-    );
+  if (data.isIndividualCustomer && 
+      (!data.customerName || data.customerName.length === 0)) {
+    return {
+      success: false,
+      error: new z.ZodError([{
+        code: z.ZodIssueCode.custom,
+        path: ["customerName"],
+        message: "Customer name is required for individual customers"
+      }])
+    };
   }
   
-  return refinedSchema;
+  // Validate through the base schema
+  return customerSegmentSchema.safeParse(data);
 };
