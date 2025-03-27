@@ -1,6 +1,7 @@
 
 import { z } from "zod";
 
+// Base schema definition
 export const customerSegmentSchema = z.object({
   name: z.string().min(1, { message: "Segment name is required" }),
   type: z.enum(["b2b", "b2c", "b2b2c"], {
@@ -44,34 +45,49 @@ export type CustomerSegmentFormData = z.infer<typeof customerSegmentSchema>;
 
 // Conditional validation function
 export const validateCustomerSegmentForm = (data: any) => {
-  const baseSchema = customerSegmentSchema;
+  // Create a refined schema based on conditions
+  let refinedSchema = customerSegmentSchema;
   
-  // Add conditional validation
+  // Add conditional validation for hardware
   if (data.includesHardware) {
-    // Hardware acquisition type is required if includesHardware is true
-    baseSchema.shape.hardwareAcquisitionType = z.enum(["purchase", "rent", "lease"], {
-      required_error: "Hardware acquisition type is required",
-    });
+    refinedSchema = refinedSchema.refine(
+      (values) => !values.includesHardware || values.hardwareAcquisitionType !== undefined,
+      {
+        message: "Hardware acquisition type is required when hardware is included",
+        path: ["hardwareAcquisitionType"]
+      }
+    ).refine(
+      (values) => !values.includesHardware || values.hardwareId !== undefined,
+      {
+        message: "Hardware product is required when hardware is included",
+        path: ["hardwareId"]
+      }
+    );
     
-    // Hardware ID is required if includesHardware is true
-    baseSchema.shape.hardwareId = z.number({
-      required_error: "Hardware product is required",
-    });
-    
-    // If hardware acquisition type is lease, leaseInterestRate is required
+    // Additional validation for lease
     if (data.hardwareAcquisitionType === "lease") {
-      baseSchema.shape.leaseInterestRate = z.number({
-        required_error: "Lease interest rate is required",
-      }).min(0, { message: "Interest rate must be a positive number" });
+      refinedSchema = refinedSchema.refine(
+        (values) => values.hardwareAcquisitionType !== "lease" || 
+                   (values.leaseInterestRate !== undefined && values.leaseInterestRate > 0),
+        {
+          message: "Lease interest rate is required for leasing hardware",
+          path: ["leaseInterestRate"]
+        }
+      );
     }
   }
   
-  // If isIndividualCustomer is true, require customer name
+  // Individual customer validation
   if (data.isIndividualCustomer) {
-    baseSchema.shape.customerName = z.string({
-      required_error: "Customer name is required",
-    }).min(1, { message: "Customer name is required" });
+    refinedSchema = refinedSchema.refine(
+      (values) => !values.isIndividualCustomer || 
+                 (values.customerName !== undefined && values.customerName.length > 0),
+      {
+        message: "Customer name is required for individual customers",
+        path: ["customerName"]
+      }
+    );
   }
   
-  return baseSchema;
+  return refinedSchema;
 };

@@ -35,10 +35,13 @@ const CustomerSegmentModal: React.FC<CustomerSegmentModalProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState('basic');
   
-  // Initialize form with default values
+  // Get form values to use for dynamic validation
+  const formValues = segment || defaultNewSegment as CustomerSegment;
+  
+  // Initialize form with dynamic validation
   const methods = useForm({
-    resolver: zodResolver(customerSegmentSchema),
-    defaultValues: segment || defaultNewSegment as CustomerSegment,
+    resolver: zodResolver(validateCustomerSegmentForm(formValues)),
+    defaultValues: formValues,
     mode: 'onChange',
   });
   
@@ -50,6 +53,15 @@ const CustomerSegmentModal: React.FC<CustomerSegmentModalProps> = ({
   const hardwareAcquisitionType = watch('hardwareAcquisitionType');
   const subscriptionType = watch('subscriptionType');
   const isIndividualCustomer = watch('isIndividualCustomer');
+  
+  // Update validation schema when dependent fields change
+  useEffect(() => {
+    // Apply dynamic validation based on current form values
+    methods.clearErrors();
+    
+    // This forces revalidation with the current form state
+    trigger();
+  }, [includesHardware, hardwareAcquisitionType, isIndividualCustomer, trigger]);
   
   // When hardware acquisition type changes, set minimum contract length
   useEffect(() => {
