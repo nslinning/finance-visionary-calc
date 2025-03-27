@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { TranslationObject } from '../../constants/calculator/types';
-import { DollarSign, Euro, Currency } from 'lucide-react';
+import { DollarSign, Euro, PoundSterling, Currency } from 'lucide-react';
 
 interface SettingsModalProps {
   t: TranslationObject;
@@ -52,15 +52,15 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               <div className="grid grid-cols-3 gap-2">
                 <button
                   type="button"
-                  onClick={() => setCurrency('USD')}
+                  onClick={() => setCurrency('NOK')}
                   className={`flex items-center justify-center p-2 rounded-md border ${
-                    currency === 'USD' 
+                    currency === 'NOK' 
                       ? 'bg-blue-100 border-blue-500 dark:bg-blue-900 dark:border-blue-400' 
                       : 'border-gray-300 dark:border-gray-700'
                   }`}
                 >
-                  <DollarSign className="h-4 w-4 mr-1" />
-                  <span>USD</span>
+                  <Currency className="h-4 w-4 mr-1" />
+                  <span>NOK</span>
                 </button>
                 <button
                   type="button"
@@ -76,15 +76,51 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setCurrency('NOK')}
+                  onClick={() => setCurrency('USD')}
                   className={`flex items-center justify-center p-2 rounded-md border ${
-                    currency === 'NOK' 
+                    currency === 'USD' 
+                      ? 'bg-blue-100 border-blue-500 dark:bg-blue-900 dark:border-blue-400' 
+                      : 'border-gray-300 dark:border-gray-700'
+                  }`}
+                >
+                  <DollarSign className="h-4 w-4 mr-1" />
+                  <span>USD</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrency('GBP')}
+                  className={`flex items-center justify-center p-2 rounded-md border ${
+                    currency === 'GBP' 
+                      ? 'bg-blue-100 border-blue-500 dark:bg-blue-900 dark:border-blue-400' 
+                      : 'border-gray-300 dark:border-gray-700'
+                  }`}
+                >
+                  <PoundSterling className="h-4 w-4 mr-1" />
+                  <span>GBP</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrency('SEK')}
+                  className={`flex items-center justify-center p-2 rounded-md border ${
+                    currency === 'SEK' 
                       ? 'bg-blue-100 border-blue-500 dark:bg-blue-900 dark:border-blue-400' 
                       : 'border-gray-300 dark:border-gray-700'
                   }`}
                 >
                   <Currency className="h-4 w-4 mr-1" />
-                  <span>NOK</span>
+                  <span>SEK</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrency('DKK')}
+                  className={`flex items-center justify-center p-2 rounded-md border ${
+                    currency === 'DKK' 
+                      ? 'bg-blue-100 border-blue-500 dark:bg-blue-900 dark:border-blue-400' 
+                      : 'border-gray-300 dark:border-gray-700'
+                  }`}
+                >
+                  <Currency className="h-4 w-4 mr-1" />
+                  <span>DKK</span>
                 </button>
               </div>
             </div>

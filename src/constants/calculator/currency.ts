@@ -6,7 +6,8 @@ export const CURRENCY_RATES = {
   GBP: 0.77,
   NOK: 10.5,
   DKK: 6.8,
-  SEK: 10.3
+  SEK: 10.3,
+  CHF: 0.88
 };
 
 export const CURRENCY_SYMBOLS = {
@@ -15,5 +16,6 @@ export const CURRENCY_SYMBOLS = {
   GBP: '£',
   NOK: 'kr',
   DKK: 'kr',
-  SEK: 'kr'
+  SEK: 'kr',
+  CHF: 'Fr'
 };

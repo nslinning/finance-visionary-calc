@@ -5,7 +5,7 @@ export const useCalculatorUI = (theme: string = 'light') => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('');
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState('NOK');  // Changed default from USD to NOK
   const [showSettings, setShowSettings] = useState(false);
   
   // Apply theme class to document
@@ -33,3 +33,4 @@ export const useCalculatorUI = (theme: string = 'light') => {
     openAddProductModal
   };
 };
+
