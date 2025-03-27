@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { translations } from '../constants/calculator/translations';
 import { initialProducts } from '../constants/calculator/initialData';
-import { Product, ProductMetric } from '../types/calculator';
+import { Product, ProductMetric, CustomerSegment } from '../types/calculator';
 import { 
   calculateProductMetrics,
   getCategoryName,
@@ -13,8 +13,9 @@ import { useCalculatorProducts } from './calculator/useCalculatorProducts';
 import { useCalculatorFinancials } from './calculator/useCalculatorFinancials';
 import { useCalculatorData } from './calculator/useCalculatorData';
 import { useCalculatorUI } from './calculator/useCalculatorUI';
+import { useCustomerSegments } from './calculator/useCustomerSegments';
 
-export const useCalculatorState = (language: string = 'en', theme: string = 'light') => {
+export const useCalculatorState = (language: string = 'no', theme: string = 'light') => {
   const {
     periods,
     incomeStreams,
@@ -64,6 +65,15 @@ export const useCalculatorState = (language: string = 'en', theme: string = 'lig
     setShowSettings,
     openAddProductModal
   } = useCalculatorUI(theme);
+
+  const {
+    segments,
+    setSegments,
+    addSegment,
+    updateSegment,
+    deleteSegment,
+    calculateSegmentRevenue
+  } = useCustomerSegments();
   
   useEffect(() => {
     setProducts(initialProducts as Product[]);
@@ -123,6 +133,7 @@ export const useCalculatorState = (language: string = 'en', theme: string = 'lig
     incomeStreams,
     fixedCosts,
     products,
+    segments,
     productMetrics,
     expandedMetrics,
     filteredCategory,
@@ -146,6 +157,7 @@ export const useCalculatorState = (language: string = 'en', theme: string = 'lig
     setIncomeStreams,
     setFixedCosts,
     setProducts,
+    setSegments,
     setEditingProduct,
     setNewProduct,
     toggleMetricExpansion,
@@ -165,6 +177,10 @@ export const useCalculatorState = (language: string = 'en', theme: string = 'lig
     setCurrency,
     setShowSettings,
     openAddProductModal,
+    addSegment,
+    updateSegment,
+    deleteSegment,
+    calculateSegmentRevenue,
     setLanguage: (lang: string) => {/* This would be implemented by parent */},
     setTheme: (theme: string) => {/* This would be implemented by parent */},
   };

@@ -1,3 +1,4 @@
+
 // TypeScript interface for income stream value types
 export interface SubscriptionValue {
   periodId: number;
@@ -138,4 +139,17 @@ export interface NewProduct {
   averageOrderValue: number;
   customerLifetimeMonths: number;
   acquisitionCost: number;
+}
+
+export interface CustomerSegment {
+  id: number;
+  name: string;
+  type: string; // b2b, b2c, b2b2c
+  products: number[]; // array of product IDs
+  licenseFeePerUser: number;
+  contractLengthYears: number;
+  volumeDiscountRate: number; // percentage
+  contractLengthDiscountRate: number; // percentage
+  customDiscountRate: number; // percentage
+  employeeCount: number;
 }

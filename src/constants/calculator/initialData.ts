@@ -1,172 +1,72 @@
 
 // Initial data for application state
 export const initialPeriods = [
-  { id: 1, label: 'Q1 2023', date: new Date(2023, 2, 31) },
-  { id: 2, label: 'Q2 2023', date: new Date(2023, 5, 30) },
-  { id: 3, label: 'Q3 2023', date: new Date(2023, 8, 30) },
-  { id: 4, label: 'Q4 2023', date: new Date(2023, 11, 31) },
-  { id: 5, label: 'Q1 2024', date: new Date(2024, 2, 31) },
-  { id: 6, label: 'Q2 2024', date: new Date(2024, 5, 30) }
+  // Empty initially - will be filled by user
 ];
 
 export const initialProducts = [
   {
     id: 1,
-    name: 'Premium Widget',
-    price: 99,
-    productionCost: 25,
-    logisticsCost: 15,
-    marketingCost: 10,
-    cost: 50,
-    margin: 49,
-    marginPercentage: 0.49,
+    name: 'STÖ heat patches 3 pcs',
+    price: 100,
+    productionCost: 12,
+    logisticsCost: 5,
+    marketingCost: 3,
+    cost: 20,
+    margin: 80,
+    marginPercentage: 0.8,
     type: 'product',
     category: 'dtc',
     revenueType: 'product',
-    averageReorderRate: 2.1,
-    averageOrderValue: 99,
+    averageReorderRate: 2.0,
+    averageOrderValue: 100,
     customerLifetimeMonths: 24,
-    acquisitionCost: 30
+    acquisitionCost: 20
   },
   {
     id: 2,
-    name: 'Business Solution',
-    price: 199,
-    operationalCost: 40,
-    marketingCost: 20,
-    cost: 60,
-    margin: 139,
-    marginPercentage: 0.7,
-    type: 'service',
-    category: 'dtb',
-    revenueType: 'subscription',
-    averageReorderRate: 12,
-    averageOrderValue: 199,
-    customerLifetimeMonths: 36,
-    acquisitionCost: 100
+    name: 'STÖ heat patches 6 pcs',
+    price: 150,
+    productionCost: 22,
+    logisticsCost: 5,
+    marketingCost: 3,
+    cost: 30,
+    margin: 120,
+    marginPercentage: 0.8,
+    type: 'product',
+    category: 'dtc',
+    revenueType: 'product',
+    averageReorderRate: 2.0,
+    averageOrderValue: 150,
+    customerLifetimeMonths: 24,
+    acquisitionCost: 20
   },
   {
     id: 3,
-    name: 'Budget Widget',
-    price: 49,
-    productionCost: 15,
-    logisticsCost: 10,
-    marketingCost: 5,
-    cost: 30,
-    margin: 19,
-    marginPercentage: 0.39,
+    name: 'SYDERA SMART VENDING',
+    price: 200000,
+    productionCost: 100000,
+    logisticsCost: 5000,
+    marketingCost: 3000,
+    cost: 108000,
+    margin: 92000,
+    marginPercentage: 0.46,
     type: 'product',
-    category: 'reseller',
+    category: 'dtb',
     revenueType: 'product',
-    averageReorderRate: 1.5,
-    averageOrderValue: 49,
-    customerLifetimeMonths: 18,
-    acquisitionCost: 15
-  },
-  {
-    id: 4,
-    name: 'SaaS Platform',
-    price: 99,
-    operationalCost: 20,
-    marketingCost: 10,
-    cost: 30,
-    margin: 69,
-    marginPercentage: 0.7,
-    type: 'service',
-    category: 'software',
-    revenueType: 'subscription',
-    averageReorderRate: 12,
-    averageOrderValue: 99,
-    customerLifetimeMonths: 24,
-    acquisitionCost: 50
+    averageReorderRate: 0.25,
+    averageOrderValue: 200000,
+    customerLifetimeMonths: 60,
+    acquisitionCost: 5000
   }
 ];
 
 export const initialIncomeStreams = [
-  {
-    id: 1,
-    name: 'DTC Sales',
-    type: 'sales',
-    category: 'dtc',
-    values: [
-      { periodId: 1, revenue: 50000 },
-      { periodId: 2, revenue: 65000 },
-      { periodId: 3, revenue: 80000 },
-      { periodId: 4, revenue: 110000 },
-      { periodId: 5, revenue: 95000 },
-      { periodId: 6, revenue: 125000 }
-    ]
-  },
-  {
-    id: 2,
-    name: 'B2B Sales',
-    type: 'sales',
-    category: 'dtb',
-    values: [
-      { periodId: 1, revenue: 120000 },
-      { periodId: 2, revenue: 130000 },
-      { periodId: 3, revenue: 150000 },
-      { periodId: 4, revenue: 180000 },
-      { periodId: 5, revenue: 200000 },
-      { periodId: 6, revenue: 220000 }
-    ]
-  },
-  {
-    id: 3,
-    name: 'SaaS Subscription',
-    type: 'subscription',
-    category: 'software',
-    values: [
-      { periodId: 1, subscribers: 500, averageRevenue: 99, multiplier: 1, churnRate: 0.03 },
-      { periodId: 2, subscribers: 650, averageRevenue: 99, multiplier: 1, churnRate: 0.03 },
-      { periodId: 3, subscribers: 800, averageRevenue: 99, multiplier: 1, churnRate: 0.025 },
-      { periodId: 4, subscribers: 950, averageRevenue: 99, multiplier: 1, churnRate: 0.025 },
-      { periodId: 5, subscribers: 1100, averageRevenue: 99, multiplier: 1, churnRate: 0.02 },
-      { periodId: 6, subscribers: 1300, averageRevenue: 99, multiplier: 1, churnRate: 0.02 }
-    ]
-  }
+  // Empty initially
 ];
 
 export const initialFixedCosts = [
-  {
-    id: 1,
-    name: 'Salaries',
-    category: 'personnel',
-    values: [
-      { periodId: 1, amount: 50000 },
-      { periodId: 2, amount: 50000 },
-      { periodId: 3, amount: 60000 },
-      { periodId: 4, amount: 60000 },
-      { periodId: 5, amount: 70000 },
-      { periodId: 6, amount: 70000 }
-    ]
-  },
-  {
-    id: 2,
-    name: 'Office & Facilities',
-    category: 'facilities',
-    values: [
-      { periodId: 1, amount: 15000 },
-      { periodId: 2, amount: 15000 },
-      { periodId: 3, amount: 15000 },
-      { periodId: 4, amount: 15000 },
-      { periodId: 5, amount: 18000 },
-      { periodId: 6, amount: 18000 }
-    ]
-  },
-  {
-    id: 3,
-    name: 'Marketing',
-    category: 'marketing',
-    values: [
-      { periodId: 1, amount: 20000 },
-      { periodId: 2, amount: 25000 },
-      { periodId: 3, amount: 30000 },
-      { periodId: 4, amount: 40000 },
-      { periodId: 5, amount: 30000 },
-      { periodId: 6, amount: 35000 }
-    ]
-  }
+  // Empty initially
 ];
 
 export const defaultNewProduct = {
@@ -183,4 +83,17 @@ export const defaultNewProduct = {
   averageOrderValue: 0,
   customerLifetimeMonths: 12,
   acquisitionCost: 0,
+};
+
+// Default customer segment
+export const defaultNewSegment = {
+  name: '',
+  type: 'b2b',
+  products: [],
+  licenseFeePerUser: 0,
+  contractLengthYears: 1,
+  volumeDiscountRate: 0,
+  contractLengthDiscountRate: 0,
+  customDiscountRate: 0,
+  employeeCount: 1
 };

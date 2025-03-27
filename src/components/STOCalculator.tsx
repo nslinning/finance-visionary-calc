@@ -14,15 +14,18 @@ import ProductModal from './Products/ProductModal';
 import SettingsModal from './Settings/SettingsModal';
 import IncomeStreamsTab from './IncomeStreams/IncomeStreamsTab';
 import FixedCostsTab from './FixedCosts/FixedCostsTab';
+import TimelinePlanningTab from './Timeline/TimelinePlanningTab';
+import CustomerSegmentsTab from './CustomerSegments/CustomerSegmentsTab';
 
 // Main component
 const STOCalculator = () => {
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = useState('no'); // Norwegian as default
   const [theme, setTheme] = useState('light');
   
   const {
     activeTab,
     products,
+    segments,
     incomeStreams,
     fixedCosts,
     results,
@@ -40,6 +43,7 @@ const STOCalculator = () => {
     currency,
     summaryMetrics,
     categoryMetrics,
+    periods,
     getProductCategories,
     getRevenueTypes,
     
@@ -48,6 +52,8 @@ const STOCalculator = () => {
     setIncomeStreams,
     setFixedCosts,
     setShowSettings,
+    setPeriods,
+    setSegments,
     toggleMetricExpansion,
     editProduct,
     deleteProduct,
@@ -119,6 +125,13 @@ const STOCalculator = () => {
             />
           )}
           
+          {activeTab === 'timeline' && (
+            <TimelinePlanningTab
+              t={t}
+              setPeriods={setPeriods}
+            />
+          )}
+          
           {activeTab === 'products' && (
             <ProductsTab
               t={t}
@@ -134,6 +147,17 @@ const STOCalculator = () => {
               toggleMetricExpansion={toggleMetricExpansion}
               setFilteredCategory={setFilteredCategory}
               openAddProductModal={openAddProductModal}
+              currency={currency}
+              language={language}
+            />
+          )}
+          
+          {activeTab === 'customerSegments' && (
+            <CustomerSegmentsTab
+              t={t}
+              segments={segments}
+              setSegments={setSegments}
+              products={products}
               currency={currency}
               language={language}
             />
