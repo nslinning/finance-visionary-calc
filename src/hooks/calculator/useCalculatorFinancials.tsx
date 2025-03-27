@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo } from 'react';
 import { 
   Period, 
@@ -24,6 +25,8 @@ export const useCalculatorFinancials = (
   const [cashFlowResults, setCashFlowResults] = useState<CashFlowResult[]>([]);
   
   useEffect(() => {
+    if (periods.length === 0) return;
+    
     const calculatedResults = calculateResults(periods, incomeStreams, products, fixedCosts, vatRate);
     setResults(calculatedResults);
     
@@ -72,10 +75,35 @@ export const useCalculatorFinancials = (
       });
     });
     
-    const metricsByCategory: Record<string, any> = {};
+    const metricsByCategory: Record<string, CategoryMetrics> = {};
+    
+    // Calculate metrics for each category
+    Object.keys(revenueByCategory).forEach(category => {
+      const matchingProducts = products.filter(p => p.category === category);
+      
+      if (matchingProducts.length > 0) {
+        const avgCAC = matchingProducts.reduce((sum, p) => sum + p.acquisitionCost, 0) / matchingProducts.length;
+        const avgCLV = matchingProducts.reduce((sum, p) => {
+          // Simple CLV calculation based on AOV * Reorder Rate * Lifetime months
+          const clv = (p.averageOrderValue || p.price) * p.averageReorderRate * (p.customerLifetimeMonths / 12);
+          return sum + clv;
+        }, 0) / matchingProducts.length;
+        
+        const avgAOV = matchingProducts.reduce((sum, p) => sum + (p.averageOrderValue || p.price), 0) / matchingProducts.length;
+        const avgCPO = matchingProducts.reduce((sum, p) => sum + (p.cost / (p.averageOrderValue || p.price)), 0) / matchingProducts.length;
+        
+        metricsByCategory[category] = {
+          avgCAC,
+          avgCLV,
+          avgAOV,
+          avgCPO,
+          revenue: revenueByCategory[category]
+        };
+      }
+    });
     
     return metricsByCategory;
-  }, [incomeStreams]);
+  }, [incomeStreams, products]);
   
   return {
     vatRate,

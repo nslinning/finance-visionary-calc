@@ -60,10 +60,17 @@ export interface CashFlowResult {
   cumulativeCashFlow?: number;
 }
 
+export interface FinancialData {
+  initialBalance: number;
+  initialReceivables: number;
+  initialPayables: number;
+}
+
 export interface Period {
   id: number;
   label: string;
   date: Date;
+  financialData?: FinancialData;
 }
 
 export interface IncomeStream {
@@ -182,4 +189,3 @@ export interface ExportOptions {
   includeCustomerSegments: boolean;
   includeProducts: boolean;
 }
-

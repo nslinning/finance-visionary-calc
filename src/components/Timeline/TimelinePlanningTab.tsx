@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { TranslationObject } from '../../constants/calculator/types';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { 
   Select,
   SelectContent,
@@ -23,6 +25,9 @@ const TimelinePlanningTab: React.FC<TimelinePlanningTabProps> = ({ t, setPeriods
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [duration, setDuration] = useState<string>("1");
   const [interval, setInterval] = useState<string>("year");
+  const [initialBalance, setInitialBalance] = useState<string>("0");
+  const [initialReceivables, setInitialReceivables] = useState<string>("0");
+  const [initialPayables, setInitialPayables] = useState<string>("0");
   
   const generatePeriods = () => {
     if (!startDate) return;
@@ -31,13 +36,21 @@ const TimelinePlanningTab: React.FC<TimelinePlanningTabProps> = ({ t, setPeriods
     const periods: Period[] = [];
     let currentDate = new Date(startDate);
     
+    // Add initial financial data to the first period metadata
+    const initialFinancialData = {
+      initialBalance: parseFloat(initialBalance) || 0,
+      initialReceivables: parseFloat(initialReceivables) || 0,
+      initialPayables: parseFloat(initialPayables) || 0
+    };
+    
     if (interval === "year") {
       for (let i = 0; i < durationYears; i++) {
         const year = currentDate.getFullYear();
         periods.push({
           id: i + 1,
           label: year.toString(),
-          date: new Date(currentDate)
+          date: new Date(currentDate),
+          ...(i === 0 ? { financialData: initialFinancialData } : {})
         });
         currentDate.setFullYear(currentDate.getFullYear() + 1);
       }
@@ -48,7 +61,8 @@ const TimelinePlanningTab: React.FC<TimelinePlanningTabProps> = ({ t, setPeriods
         periods.push({
           id: i + 1,
           label: `Q${quarter} ${year}`,
-          date: new Date(currentDate)
+          date: new Date(currentDate),
+          ...(i === 0 ? { financialData: initialFinancialData } : {})
         });
         currentDate.setMonth(currentDate.getMonth() + 3);
       }
@@ -59,7 +73,8 @@ const TimelinePlanningTab: React.FC<TimelinePlanningTabProps> = ({ t, setPeriods
         periods.push({
           id: i + 1,
           label: `${month} ${year}`,
-          date: new Date(currentDate)
+          date: new Date(currentDate),
+          ...(i === 0 ? { financialData: initialFinancialData } : {})
         });
         currentDate.setMonth(currentDate.getMonth() + 1);
       }
@@ -82,7 +97,7 @@ const TimelinePlanningTab: React.FC<TimelinePlanningTabProps> = ({ t, setPeriods
                 selected={startDate}
                 onSelect={setStartDate}
                 locale={nb}
-                disabled={{ before: new Date() }}
+                className="p-3 pointer-events-auto"
               />
             </div>
           </div>
@@ -122,6 +137,44 @@ const TimelinePlanningTab: React.FC<TimelinePlanningTabProps> = ({ t, setPeriods
                   <SelectItem value="month">{t.month}</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            
+            {/* Initial Financial Data Section */}
+            <div className="border p-4 rounded-md space-y-3">
+              <h3 className="text-lg font-medium">{t.initialFinancialData || "Initial Financial Data"}</h3>
+              
+              <div className="space-y-2">
+                <Label htmlFor="initialBalance">{t.initialBalance || "Initial Balance"}</Label>
+                <Input
+                  id="initialBalance"
+                  type="number"
+                  value={initialBalance}
+                  onChange={(e) => setInitialBalance(e.target.value)}
+                  placeholder="0"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="initialReceivables">{t.initialReceivables || "Initial Receivables"}</Label>
+                <Input
+                  id="initialReceivables"
+                  type="number"
+                  value={initialReceivables}
+                  onChange={(e) => setInitialReceivables(e.target.value)}
+                  placeholder="0"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="initialPayables">{t.initialPayables || "Initial Payables"}</Label>
+                <Input
+                  id="initialPayables"
+                  type="number"
+                  value={initialPayables}
+                  onChange={(e) => setInitialPayables(e.target.value)}
+                  placeholder="0"
+                />
+              </div>
             </div>
             
             <div className="pt-4">

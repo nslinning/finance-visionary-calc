@@ -3,7 +3,7 @@ import { Period, ResultData, CashFlowResult } from '../../types/calculator';
 
 // Calculate cash flow
 export const calculateCashFlow = (periods: Period[], results: ResultData[]): CashFlowResult[] => {
-  const calculatedCashFlow = periods.map(period => {
+  const calculatedCashFlow = periods.map((period, index) => {
     // Get income and expenses from results
     const periodResult = results.find(r => r.periodId === period.id) || {
       revenue: 0,
@@ -36,7 +36,15 @@ export const calculateCashFlow = (periods: Period[], results: ResultData[]): Cas
   });
   
   // Calculate cumulative cash flow
+  // Start with initial balance if provided
   let cumulativeCashFlow = 0;
+  if (periods.length > 0 && periods[0].financialData) {
+    const firstPeriod = periods[0];
+    cumulativeCashFlow = firstPeriod.financialData.initialBalance + 
+                         firstPeriod.financialData.initialReceivables - 
+                         firstPeriod.financialData.initialPayables;
+  }
+  
   calculatedCashFlow.forEach(flow => {
     cumulativeCashFlow += flow.netCashFlow;
     flow.cumulativeCashFlow = cumulativeCashFlow;
