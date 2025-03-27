@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from 'react';
 import { translations } from '../constants/calculator/translations';
 import { initialProducts } from '../constants/calculator/initialData';
@@ -76,7 +75,7 @@ export const useCalculatorState = (language: string = 'no', theme: string = 'lig
   } = useCustomerSegments();
   
   useEffect(() => {
-    setProducts(initialProducts as Product[]);
+    setProducts(initialProducts as unknown as Product[]);
   }, []);
   
   const {

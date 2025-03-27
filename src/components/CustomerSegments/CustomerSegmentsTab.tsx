@@ -1,14 +1,14 @@
 
 import React, { useState } from 'react';
 import { TranslationObject } from '../../constants/calculator/types';
-import { PlusCircle, Edit2, Trash2, UserPlus, Download } from 'lucide-react';
-import { formatCurrency } from '../../utils/calculator';
-import { Button } from '@/components/ui/button';
 import { CustomerSegment, ExportOptions } from '../../types/calculator';
 import CustomerSegmentModal from './CustomerSegmentModal';
 import ExportResults from '../Export/ExportResults';
 import { useToast } from '@/components/ui/use-toast';
-import { Badge } from '@/components/ui/badge';
+import SegmentFilters from './SegmentFilters';
+import SegmentActions from './SegmentActions';
+import EmptySegmentState from './EmptySegmentState';
+import SegmentsList from './SegmentsList';
 
 interface CustomerSegmentsTabProps {
   t: TranslationObject;
@@ -33,6 +33,10 @@ const CustomerSegmentsTab: React.FC<CustomerSegmentsTabProps> = ({
   const [currentSegment, setCurrentSegment] = useState<CustomerSegment | null>(null);
   const [isEdit, setIsEdit] = useState(false);
   const [isIndividualCustomer, setIsIndividualCustomer] = useState(false);
+  
+  // Segment filters
+  const [showIndividualCustomers, setShowIndividualCustomers] = useState(true);
+  const [showSegments, setShowSegments] = useState(true);
   
   const openAddModal = () => {
     setCurrentSegment(null);
@@ -157,10 +161,6 @@ const CustomerSegmentsTab: React.FC<CustomerSegmentsTabProps> = ({
     };
   };
   
-  // Segment filters
-  const [showIndividualCustomers, setShowIndividualCustomers] = useState(true);
-  const [showSegments, setShowSegments] = useState(true);
-  
   const filteredSegments = segments.filter(segment => 
     (segment.isIndividualCustomer && showIndividualCustomers) || 
     (!segment.isIndividualCustomer && showSegments)
@@ -170,275 +170,41 @@ const CustomerSegmentsTab: React.FC<CustomerSegmentsTabProps> = ({
     <div className="p-4">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">{t.customerSegments}</h2>
-        <div className="flex space-x-2">
-          <Button 
-            variant="outline"
-            onClick={() => setShowExportModal(true)}
-            className="flex items-center gap-2"
-          >
-            <Download className="h-5 w-5" />
-            <span>{t.export}</span>
-          </Button>
-          <Button 
-            variant="outline"
-            onClick={openAddIndividualCustomerModal}
-            className="flex items-center gap-2"
-          >
-            <UserPlus className="h-5 w-5" />
-            <span>{t.addIndividualCustomer}</span>
-          </Button>
-          <Button 
-            onClick={openAddModal}
-            className="flex items-center gap-2"
-          >
-            <PlusCircle className="h-5 w-5" />
-            <span>{t.addNewSegment}</span>
-          </Button>
-        </div>
+        <SegmentActions
+          t={t}
+          openAddModal={openAddModal}
+          openAddIndividualCustomerModal={openAddIndividualCustomerModal}
+          openExportModal={() => setShowExportModal(true)}
+        />
       </div>
       
-      <div className="mb-6 flex space-x-2">
-        <Button
-          variant={showSegments ? "default" : "outline"}
-          onClick={() => setShowSegments(!showSegments)}
-          size="sm"
-        >
-          {t.segments}
-        </Button>
-        <Button
-          variant={showIndividualCustomers ? "default" : "outline"}
-          onClick={() => setShowIndividualCustomers(!showIndividualCustomers)}
-          size="sm"
-        >
-          {t.individualCustomers}
-        </Button>
-      </div>
+      <SegmentFilters
+        t={t}
+        showSegments={showSegments}
+        showIndividualCustomers={showIndividualCustomers}
+        setShowSegments={setShowSegments}
+        setShowIndividualCustomers={setShowIndividualCustomers}
+      />
       
       {filteredSegments.length === 0 ? (
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-8 text-center">
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
-            {showIndividualCustomers && showSegments
-              ? t.noCustomerSegmentsOrIndividuals
-              : showIndividualCustomers 
-                ? t.noIndividualCustomers 
-                : t.noCustomerSegments}
-          </p>
-          {showIndividualCustomers && (
-            <Button 
-              onClick={openAddIndividualCustomerModal}
-              variant="outline"
-              className="mx-auto mb-2"
-            >
-              {t.addIndividualCustomer}
-            </Button>
-          )}
-          {showSegments && (
-            <Button 
-              onClick={openAddModal}
-              variant="outline"
-              className="mx-auto"
-            >
-              {t.addNewSegment}
-            </Button>
-          )}
-        </div>
+        <EmptySegmentState
+          t={t}
+          showIndividualCustomers={showIndividualCustomers}
+          showSegments={showSegments}
+          openAddModal={openAddModal}
+          openAddIndividualCustomerModal={openAddIndividualCustomerModal}
+        />
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredSegments.map(segment => {
-            const revenue = calculateSegmentRevenue(segment);
-            const hardwareProduct = segment.includesHardware && segment.hardwareId
-              ? products.find(p => p.id === segment.hardwareId)
-              : null;
-              
-            return (
-              <div key={segment.id} className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
-                <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-lg">{segment.name}</h3>
-                      {segment.isIndividualCustomer && (
-                        <Badge variant="outline" className="text-xs">{t.individualCustomer}</Badge>
-                      )}
-                    </div>
-                    <div className="flex items-center mt-1">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {t[segment.type as keyof TranslationObject] as string}
-                      </p>
-                      {segment.includesHardware && (
-                        <Badge className="ml-2 text-xs" variant="secondary">
-                          {t[segment.hardwareAcquisitionType as keyof TranslationObject] as string}
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex space-x-2">
-                    <button onClick={() => openEditModal(segment)} className="text-blue-600 dark:text-blue-400">
-                      <Edit2 className="h-5 w-5" />
-                    </button>
-                    <button onClick={() => deleteSegment(segment.id)} className="text-red-600 dark:text-red-400">
-                      <Trash2 className="h-5 w-5" />
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="p-4 space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">{t.employeeCount}:</span>
-                    <span className="font-medium">{segment.employeeCount}</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">{t.monthlyPerUserFee}:</span>
-                    <span className="font-medium">
-                      {formatCurrency(revenue.monthlyPerUser, currency, language)}
-                    </span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">{t.monthlyFee}:</span>
-                    <span className="font-medium">
-                      {formatCurrency(revenue.monthly, currency, language)}
-                    </span>
-                  </div>
-                  
-                  {(segment.logisticsCostPercentage || segment.indirectCostPercentage || segment.additionalCosts) && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">{t.monthlyFee} ({t.costBreakdown}):</span>
-                      <span className="font-medium">
-                        {formatCurrency(revenue.monthlyWithCosts, currency, language)}
-                      </span>
-                    </div>
-                  )}
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">{t.annualRecurringRevenue}:</span>
-                    <span className="font-medium">
-                      {formatCurrency(revenue.annual, currency, language)}
-                    </span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">{t.totalContractValue}:</span>
-                    <span className="font-medium">
-                      {formatCurrency(revenue.total, currency, language)}
-                    </span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">{t.contractLength}:</span>
-                    <span className="font-medium">{segment.contractLengthYears} {t.years}</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">{t.subscriptionType}:</span>
-                    <span className="font-medium">
-                      {segment.subscriptionType === 'mrr-no-commitment' ? t.mrrNoCommitment : t.arrWithCommitment}
-                    </span>
-                  </div>
-                  
-                  {(segment.logisticsCostPercentage || segment.indirectCostPercentage || segment.additionalCosts) && (
-                    <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
-                      <h4 className="font-medium mb-2">{t.additionalCostsTab}</h4>
-                      <div className="space-y-2">
-                        {segment.logisticsCostPercentage > 0 && (
-                          <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">{t.logisticsCosts} ({segment.logisticsCostPercentage}%):</span>
-                            <span className="font-medium">
-                              {formatCurrency(revenue.additionalCosts.logistics, currency, language)}
-                            </span>
-                          </div>
-                        )}
-                        
-                        {segment.indirectCostPercentage > 0 && (
-                          <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">{t.indirectCosts} ({segment.indirectCostPercentage}%):</span>
-                            <span className="font-medium">
-                              {formatCurrency(revenue.additionalCosts.indirect, currency, language)}
-                            </span>
-                          </div>
-                        )}
-                        
-                        {segment.additionalCosts > 0 && (
-                          <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">{t.additionalFixedCosts}:</span>
-                            <span className="font-medium">
-                              {formatCurrency(revenue.additionalCosts.fixed, currency, language)}
-                            </span>
-                          </div>
-                        )}
-                        
-                        <div className="flex justify-between pt-1 border-t border-gray-100 dark:border-gray-700">
-                          <span className="text-gray-600 dark:text-gray-400 font-medium">{t.total}:</span>
-                          <span className="font-medium">
-                            {formatCurrency(revenue.additionalCosts.total, currency, language)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {segment.includesHardware && hardwareProduct && (
-                    <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
-                      <h4 className="font-medium mb-2">{t.hardwareDetails}</h4>
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">{t.hardware}:</span>
-                          <span className="font-medium">{hardwareProduct.name}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">{t.acquisitionType}:</span>
-                          <span className="font-medium">
-                            {t[segment.hardwareAcquisitionType as keyof TranslationObject] as string}
-                          </span>
-                        </div>
-                        {segment.hardwareAcquisitionType === 'lease' && (
-                          <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">{t.interestRate}:</span>
-                            <span className="font-medium">{segment.leaseInterestRate}%</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                {segment.products.length > 0 && (
-                  <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                    <h4 className="font-medium mb-2">{t.segmentProducts}</h4>
-                    <ul className="space-y-1 text-sm">
-                      {segment.products.map(productId => {
-                        const product = products.find(p => p.id === productId);
-                        return product ? (
-                          <li key={productId} className="text-gray-600 dark:text-gray-400">
-                            {product.name}
-                          </li>
-                        ) : null;
-                      })}
-                    </ul>
-                  </div>
-                )}
-                
-                {segment.isIndividualCustomer && segment.customerName && (
-                  <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                    <h4 className="font-medium mb-2">{t.customerDetails}</h4>
-                    <div className="space-y-1 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">{t.name}:</span>
-                        <span>{segment.customerName}</span>
-                      </div>
-                      {segment.customerEmail && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">{t.email}:</span>
-                          <span>{segment.customerEmail}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <SegmentsList
+          t={t}
+          segments={filteredSegments}
+          products={products}
+          currency={currency}
+          language={language}
+          calculateSegmentRevenue={calculateSegmentRevenue}
+          onEdit={openEditModal}
+          onDelete={deleteSegment}
+        />
       )}
       
       {showModal && (
