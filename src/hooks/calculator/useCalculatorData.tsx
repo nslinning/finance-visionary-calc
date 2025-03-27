@@ -10,7 +10,8 @@ import {
 import { 
   initialPeriods, 
   initialIncomeStreams, 
-  initialFixedCosts
+  initialFixedCosts,
+  demoCustomerSegment
 } from '../../constants/calculator/initialData';
 
 export const useCalculatorData = () => {
