@@ -110,7 +110,10 @@ const CustomerSegmentsTab: React.FC<CustomerSegmentsTabProps> = ({
               <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                 <div>
                   <h3 className="font-semibold text-lg">{segment.name}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{t[segment.type as keyof typeof t]}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {/* Fix for type error - use string type casting */}
+                    {(t[segment.type as keyof TranslationObject] as string)}
+                  </p>
                 </div>
                 <div className="flex space-x-2">
                   <button onClick={() => openEditModal(segment)} className="text-blue-600 dark:text-blue-400">

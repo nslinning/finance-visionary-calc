@@ -5,6 +5,9 @@ export interface ProductCategories {
   dtb: string;
   reseller: string;
   software: string;
+  b2b?: string;  // Legger til b2b
+  b2c?: string;  // Legger til b2c
+  b2b2c?: string;  // Legger til b2b2c
 }
 
 export interface RevenueTypes {
@@ -35,6 +38,8 @@ export interface TranslationObject {
   products: string;
   incomeStreams: string;
   fixedCosts: string;
+  customerSegments: string;
+  timelinePlanning: string;
   financialOverview: string;
   allCategories: string;
   totalRevenue: string;
@@ -118,4 +123,32 @@ export interface TranslationObject {
   amount: string;
   totalFixedCosts: string;
   totalFixedCostsSummary: string;
+  // Nye egenskaper for kundesegmenter
+  addNewSegment: string;
+  editSegment: string;
+  segmentName: string;
+  segmentType: string;
+  segmentProducts: string;
+  licenseFee: string;
+  employeeCount: string;
+  contractLength: string;
+  years: string;
+  discountParameters: string;
+  volumeDiscount: string;
+  contractLengthDiscount: string;
+  customDiscount: string;
+  monthlyFee: string;
+  annualRecurringRevenue: string;
+  totalContractValue: string;
+  b2b: string;
+  b2c: string;
+  b2b2c: string;
+  // Nye egenskaper for tidslinjeplanlegging
+  timelineStartDate: string;
+  timelineDuration: string;
+  timelineInterval: string;
+  year: string;
+  quarter: string;
+  month: string;
+  applyTimeline: string;
 }
