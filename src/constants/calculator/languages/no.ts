@@ -1,3 +1,4 @@
+
 import { ProductCategories, RevenueTypes, FixedCostCategories, FixedCostTypes, TranslationObject } from '../types';
 
 const productCategories: ProductCategories = {
@@ -151,10 +152,12 @@ export const norwegianTranslations: TranslationObject = {
   amount: 'Beløp',
   totalFixedCosts: 'Totale faste kostnader',
   totalFixedCostsSummary: 'Totale faste kostnader for alle kategorier i siste periode.',
-  welcomeToDashboard: "Velkommen til din strategiske økonomiske planlegger",
-  dashboardInstructions: "For å komme i gang, trenger du å legge til informasjon i de forskjellige kategoriene. Start med tidsplanlegging og legg deretter til produkter, inntektsstrømmer og faste kostnader.",
-  firstStepTitle: "Start med Tidsplanlegging",
-  firstStepDescription: "Angi perioder du vil analysere, som måneder eller kvartaler.",
-  secondStepTitle: "Legg til Produkter",
-  secondStepDescription: "Opprett produkter med detaljer som pris, anskaffelseskostnad og forventet salgsvolum."
+  welcomeToDashboard: "Velkommen til selskapets finansielle analyseverktøy",
+  dashboardInstructions: "Dette verktøyet er designet for finansielle rådgivere, regnskapsførere, investorer og selskapsledelsen for å gjennomføre omfattende forretningsanalyse og planlegging.",
+  firstStepTitle: "Start med tidsplanlegging",
+  firstStepDescription: "Definer dine analyseperioder (måneder, kvartaler) for finansielle prognoser.",
+  secondStepTitle: "Legg til produkter og tjenester",
+  secondStepDescription: "Registrer din produktportefølje med priser, kostnader og prognostiserte salgsvolumer.",
+  startWithTimeline: "Konfigurer tidsplan",
+  addProducts: "Legg til produkter"
 };

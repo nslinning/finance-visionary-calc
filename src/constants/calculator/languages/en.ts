@@ -152,10 +152,12 @@ export const englishTranslations: TranslationObject = {
   amount: 'Amount',
   totalFixedCosts: 'Total Fixed Costs',
   totalFixedCostsSummary: 'Total fixed costs across all categories for the latest period.',
-  welcomeToDashboard: "Welcome to Your Strategic Financial Planner",
-  dashboardInstructions: "To get started, you need to add information in different categories. Begin with timeline planning, then add products, income streams, and fixed costs.",
-  firstStepTitle: "Start with Timeline Planning",
-  firstStepDescription: "Set the periods you want to analyze, such as months or quarters.",
-  secondStepTitle: "Add Products",
-  secondStepDescription: "Create products with details like price, acquisition cost, and expected sales volume."
+  welcomeToDashboard: "Welcome to Your Financial Analysis Tool",
+  dashboardInstructions: "This tool is designed for financial advisors, accountants, investors, and company management to conduct comprehensive business analysis and planning.",
+  firstStepTitle: "Begin with Timeline Setup",
+  firstStepDescription: "Define your analysis periods (months, quarters) for financial projections.",
+  secondStepTitle: "Add Your Products & Services",
+  secondStepDescription: "Enter your product portfolio with pricing, costs, and projected sales volumes.",
+  startWithTimeline: "Set Up Timeline",
+  addProducts: "Add Products"
 };

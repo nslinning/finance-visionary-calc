@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -9,6 +8,7 @@ import { COLORS } from '../../constants/calculator/categories';
 import { formatCurrency } from '../../utils/calculator';
 import { TranslationObject } from '../../constants/calculator/types';
 import { CategoryMetrics, CashFlowResult, ResultData, SummaryMetrics } from '../../types/calculator';
+import { Button } from '../ui/button';
 
 interface DashboardTabProps {
   t: TranslationObject;
@@ -34,30 +34,37 @@ const DashboardTab: React.FC<DashboardTabProps> = ({
   if (!summaryMetrics) {
     return (
       <div className="p-8 text-center bg-white dark:bg-gray-800 rounded-lg shadow-md">
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           <PlusCircle className="w-16 h-16 mx-auto text-blue-500 mb-6" />
           <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
             {t.welcomeToDashboard}
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-gray-600 dark:text-gray-400 mb-8">
             {t.dashboardInstructions}
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-700 dark:text-blue-300 mb-2">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+              <h3 className="font-semibold text-lg text-blue-700 dark:text-blue-300 mb-3">
                 {t.firstStepTitle}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                 {t.firstStepDescription}
               </p>
+              <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                {t.startWithTimeline}
+              </Button>
             </div>
-            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-              <h3 className="font-semibold text-green-700 dark:text-green-300 mb-2">
+            <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg">
+              <h3 className="font-semibold text-lg text-green-700 dark:text-green-300 mb-3">
                 {t.secondStepTitle}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                 {t.secondStepDescription}
               </p>
+              <Button className="w-full bg-green-600 hover:bg-green-700">
+                {t.addProducts}
+              </Button>
             </div>
           </div>
         </div>

@@ -160,4 +160,7 @@ export interface TranslationObject {
   firstStepDescription: string;
   secondStepTitle: string;
   secondStepDescription: string;
+  // Nye knapper for velkomstskjermen
+  startWithTimeline: string;
+  addProducts: string;
 }
