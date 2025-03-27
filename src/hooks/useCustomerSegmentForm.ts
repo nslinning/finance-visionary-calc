@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { CustomerSegment } from '../types/calculator';
 import { defaultNewSegment } from '../constants/calculator/initialData';
-import { validateCustomerSegmentForm } from '../validation/customerSegmentSchema';
+import { validateCustomerSegmentForm, ValidationResult } from '../validation/customerSegmentSchema';
 import { toast } from '@/components/ui/use-toast';
 
 export const useCustomerSegmentForm = (
@@ -26,15 +26,13 @@ export const useCustomerSegmentForm = (
       const formErrors: Record<string, any> = {};
       
       // Handle error properly based on the return type
-      // Make sure we only access error when success is false
-      if (!result.success && result.error) {
-        for (const issue of result.error.errors) {
-          const path = issue.path.join('.');
-          formErrors[path] = {
-            type: issue.code,
-            message: issue.message
-          };
-        }
+      // We already know result.success is false here, so result.error must exist
+      for (const issue of result.error.errors) {
+        const path = issue.path.join('.');
+        formErrors[path] = {
+          type: issue.code,
+          message: issue.message
+        };
       }
       
       return {
