@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ExportOptions } from '../../types/calculator';
-import { Download, FileSpreadsheet, FilePdf } from 'lucide-react';
+import { Download, FileSpreadsheet, FileIcon } from 'lucide-react';
 import { TranslationObject } from '../../constants/calculator/types';
 
 interface ExportResultsProps {
@@ -84,7 +84,7 @@ const ExportResults: React.FC<ExportResultsProps> = ({
               <SelectContent>
                 <SelectItem value="pdf" className="flex items-center">
                   <div className="flex items-center gap-2">
-                    <FilePdf className="h-4 w-4" />
+                    <FileIcon className="h-4 w-4" />
                     <span>PDF</span>
                   </div>
                 </SelectItem>

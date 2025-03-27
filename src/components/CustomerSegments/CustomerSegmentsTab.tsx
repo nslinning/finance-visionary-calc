@@ -101,7 +101,7 @@ const CustomerSegmentsTab: React.FC<CustomerSegmentsTabProps> = ({
     const customDiscount = segment.customDiscountRate / 100;
     
     const totalDiscountRate = volumeDiscount + contractDiscount + customDiscount;
-    const discountedMonthlyFee = monthlyFee * (1 - totalDiscountRate);
+    let discountedMonthlyFee = monthlyFee * (1 - totalDiscountRate);
     
     // Handle hardware costs if applicable
     let hardwareCost = 0;
