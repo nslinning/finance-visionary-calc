@@ -151,4 +151,5 @@ export interface TranslationObject {
   month: string;
   applyTimeline: string;
   setStartDate?: string;
+  discountBasedOn?: string;
 }
