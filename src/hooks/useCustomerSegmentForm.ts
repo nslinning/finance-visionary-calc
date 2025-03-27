@@ -25,12 +25,15 @@ export const useCustomerSegmentForm = (
     } else {
       const formErrors: Record<string, any> = {};
       
-      for (const issue of result.error.errors) {
-        const path = issue.path.join('.');
-        formErrors[path] = {
-          type: issue.code,
-          message: issue.message
-        };
+      // Handle error properly based on the return type
+      if ('error' in result) {
+        for (const issue of result.error.errors) {
+          const path = issue.path.join('.');
+          formErrors[path] = {
+            type: issue.code,
+            message: issue.message
+          };
+        }
       }
       
       return {
